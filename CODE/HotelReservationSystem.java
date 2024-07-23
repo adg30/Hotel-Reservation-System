@@ -111,6 +111,8 @@ public static void createHotel(Scanner scan) {
     while (type < 1 || type > 2)
     {
         System.out.print("Invalid type. Try Again (1-2): ");
+        type = scan.nextInt();
+        scan.nextLine();
     }
     System.out.println("Enter number of rooms (1-50):");
     int numRooms = scan.nextInt();

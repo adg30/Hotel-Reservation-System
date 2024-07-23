@@ -14,7 +14,7 @@ public class Hotel {
   *list of rooms in the hotel
   */
   private ArrayList<Room> rooms = new ArrayList<Room>();
-
+  private ArrayList<Double> DatePrice;
   /**
    * Constructs a hotel with a specified name and number of rooms.
    *
@@ -24,6 +24,11 @@ public class Hotel {
   public Hotel(String name, int numrooms, int type) {
     int Amounteach = numrooms / 3;
     int i, j, k;
+    this.DatePrice = new ArrayList<Double>();
+    for(i = 0; i < 31; i++)
+    {
+      this.DatePrice.add(1.00);
+    }
     // use numrooms to construct all rooms using a for loop
     switch(type){
       case 1:
@@ -64,6 +69,11 @@ public class Hotel {
 
     int Amounteach = numrooms / 3;
     int i, j, k;
+    this.DatePrice = new ArrayList<Double>();
+    for(i = 0; i < 31; i++)
+    {
+      this.DatePrice.add(1.00);
+    }
     // use numrooms to construct all rooms using a for loop
     switch(type){
       case 1:
@@ -319,7 +329,8 @@ public class Hotel {
     System.out.println("<<4. Update base price of rooms>>");
     System.out.println("<<5. Remove Reservation>>");
     System.out.println("<<6. Remove hotel>>");
-    System.out.println("<<7. Back to Menu>>");
+    System.out.println("<<7. Modify Date Price>>");
+    System.out.println("<<8. Back to Menu>>");
     System.out.print("Please select an option: ");
 
     int choice = scan.nextInt();
@@ -398,6 +409,9 @@ public class Hotel {
         }
         break;
       case 7:
+        DatePriceModify(scan);
+        break;
+      case 8:
         return;
       default:
         System.out.println(">>       Invalid choice, please try again.      <<");
@@ -626,6 +640,9 @@ public class Hotel {
     int checkin = 0;
     int checkout = 0;
     double price;
+    int numNights = 0;
+    double percentage = 0;
+    int firstdate = 0;
     System.out.print("Enter Check-in date (1-30):");
     checkin = scan.nextInt();
     scan.nextLine(); // Consume newline
@@ -701,9 +718,14 @@ public class Hotel {
     if (availableRoom != null) {
       System.out.print("Enter guest name: ");
       String guestName = scan.nextLine();
-      availableRoom.addReservation(guestName, checkin, checkout);
-      int numNights = checkout - checkin;
-
+      numNights = checkout - checkin;
+      firstdate = checkin;
+      while(checkin < checkout)
+      {
+        percentage += DatePrice.get(checkin - 1);
+        checkin++;
+      }
+      System.out.println("Percentage %: " + percentage);
       System.out.print("Do you have a discount code? (Y/N): ");
       char discountChoice = scan.next().charAt(0);
       scan.nextLine();
@@ -712,30 +734,44 @@ public class Hotel {
         System.out.print("Code: ");
         String code = scan.nextLine();
         if(code.equals("I_WORK_HERE"))
-          price = availableRoom.getPrice() * numNights * 0.9;
+        {
+          price = availableRoom.getPrice() * percentage * 0.9;
+          System.out.println("Applying 10% discount...");
+        }
         else if(code.equals("STAY4_GET1") && numNights > 4)
-          price = availableRoom.getPrice() * (numNights - 1);
+        {
+          price = availableRoom.getPrice() * (percentage - DatePrice.get(firstdate - 1));
+          System.out.println("Removing price for first day...");
+        }
         else if (code.equals("PAYDAY") && (availableRoom.getAvailability(15) || availableRoom.getAvailability(30)))
-          price = (availableRoom.getPrice() * numNights) - (availableRoom.getPrice() * numNights * 0.07);
+        {
+          price = (availableRoom.getPrice() * percentage * 0.93);
+          System.out.println("Applying 6% discount...");
+        }
         else if (code.equals("PAYDAY") && !(availableRoom.getAvailability(15) || availableRoom.getAvailability(30)))
         {
           System.out.print("Day 15 or 30 should be included as a checkin time. Default price will be applied with no discounts.\n");
-          price = numNights * availableRoom.getPrice();
+          price = percentage * availableRoom.getPrice();
         }
         else
-          price = numNights * availableRoom.getPrice();
+          price = percentage * availableRoom.getPrice();
       }
       // put the flags here, if else etc
       else
       {
-        price = numNights * availableRoom.getPrice();
+        price = percentage * availableRoom.getPrice();
       }
+
+      availableRoom.addReservation(guestName, checkin, checkout);
+
 
       System.out.println("\nBooking successful for guest " + guestName + " in room " + availableRoom.getID());
       System.out.printf("Total price after booking %d nights: $%.2f\n", numNights, price);
       availableRoom.addTotalPrice(price);
     }
   }
+
+
   /**
    * Method for finding an available room for a given check-in and check-out
    * dates.
@@ -785,17 +821,17 @@ public class Hotel {
         }
       }
       if (available) {
-        if (rooms.get(i).getType() == "standardRoom" && type == 1)
+        if (rooms.get(i).getType().equals("standardRoom") && type == 1)
         {
           availableStandardRooms.add(rooms.get(i));
           System.out.println("(" + (availableStandardRooms.size()) + ".) Room " + rooms.get(i).getID());
         }
-        else if(rooms.get(i).getType() == "executiveRoom" && type == 2)
+        else if(rooms.get(i).getType().equals("executiveRoom") && type == 2)
         {
           availableExecutiveRooms.add(rooms.get(i));
           System.out.println("(" + (availableExecutiveRooms.size()) + ".) Room " + rooms.get(i).getID());
         }
-        else if(rooms.get(i).getType() == "deluxeRoom" && type == 3)
+        else if(rooms.get(i).getType().equals("deluxeRoom") && type == 3)
         {
           availableDeluxeRooms.add(rooms.get(i));
           System.out.println("(" + (availableDeluxeRooms.size()) + ".) Room " + rooms.get(i).getID());
@@ -822,5 +858,25 @@ public class Hotel {
     }
     return null;
   }
-
+  public void DatePriceModify(Scanner scan){
+    System.out.print("Which date would you like to modify (1-31): ");
+    int date = scan.nextInt();
+    scan.nextLine();
+    while(date < 1 || date > 31){
+      System.out.print("Invalid input. please try again (1-31): ");
+      date = scan.nextInt();
+      scan.nextLine();
+    }
+    System.out.print("Enter new percentage for date (50-150): ");
+    double percentage = scan.nextDouble();
+    scan.nextLine();
+    while(percentage < 50 || percentage > 150)
+    {
+      System.out.print("Invalid input. please try again (50-150): ");
+      percentage = scan.nextDouble();
+      scan.nextLine();
+    }
+    this.DatePrice.set(date - 1, percentage / 100);
+    System.out.println("Price for date: " + date + " has been changed to " + percentage + "%");
+  }
 }
