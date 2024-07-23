@@ -10,7 +10,8 @@ public class Room {
     /** 
     *The price of this room
     */
-    private double price = 1299.0;
+    private double price;
+    private double totalPrice;
     /** 
     *An array containing the availability of this room
     */
@@ -19,17 +20,23 @@ public class Room {
     *An arraylist containing the reservations of this room
     */
     private ArrayList<Reservation> reservations;
-    
+    private String type;
+
+    public String getType(){
+        return this.type;
+    }
     /**
     * Constructs a room with the specified ID and price
     *
     * @param ID    the ID of the room
     * @param price the price of the room
     **/
-    public Room(int ID, double price){
+    public Room(int ID, double price, String type){
         int i;
         this.ID = ID;
         this.price = price;
+        this.totalPrice = 0;
+        this.type = type;
         this.availability = new boolean[31];
         this.reservations = new ArrayList<Reservation>();
         for(i = 0; i < 31; i++)
@@ -37,7 +44,6 @@ public class Room {
             this.availability[i] = true;
         }
     }
-    
     /**
     * Gets the ID of the room.
     *
@@ -120,4 +126,12 @@ public void updateAvailability() {
     
 }
 }
+    public void addTotalPrice(double price)
+    {
+        this.totalPrice += price;
+    }
+    public double getTotalPrice()
+    {
+        return this.totalPrice;
+    }
 }

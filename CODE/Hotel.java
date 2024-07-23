@@ -9,11 +9,11 @@ public class Hotel {
   /**
   *the name of the hotel
   */
-  private String name; 
+  private String name;
   /**
   *list of rooms in the hotel
   */
-  private ArrayList<Room> rooms = new ArrayList<Room>(); 
+  private ArrayList<Room> rooms = new ArrayList<Room>();
 
   /**
    * Constructs a hotel with a specified name and number of rooms.
@@ -21,11 +21,35 @@ public class Hotel {
    * @param name     the name of the hotel
    * @param numrooms the number of rooms in the hotel
    */
-  public Hotel(String name, int numrooms) {// use numrooms to construct all rooms using a for loop
-    this.name = name;
-    this.rooms = new ArrayList<Room>();
-    for (int i = 0; i < numrooms; i++)
-      this.rooms.add(new Room(i + 100, 1299.0));
+  public Hotel(String name, int numrooms, int type) {
+    int Amounteach = numrooms / 3;
+    int i, j, k;
+    // use numrooms to construct all rooms using a for loop
+    switch(type){
+      case 1:
+        this.name = name;
+        this.rooms = new ArrayList<Room>();
+        for (i = 0; i < numrooms; i++)
+          this.rooms.add(new standardRoom(i + 100, 1299.0));
+        break;
+      case 2:
+        this.name = name;
+        this.rooms = new ArrayList<>();
+        for(i = 0; i < Amounteach; i++){
+          this.rooms.add(new standardRoom(i + 100, 1299.0));
+        }
+        for(j = i ; j < Amounteach * 2; j++)
+          this.rooms.add(new executiveRoom(j + 100, 1299.0));
+        for(k = j; k < Amounteach * 3; k++)
+          this.rooms.add(new deluxeRoom(k + 100, 1299.0));
+
+        while(k < numrooms)
+        {
+          this.rooms.add(new deluxeRoom(k + 100, 1299.0));
+          k++;
+        }
+        break;
+    }
 
   }
 
@@ -36,20 +60,42 @@ public class Hotel {
    * @param numrooms the number of rooms in the hotel
    * @param price    the price of each room
    */
-  public Hotel(String name, int numrooms, double price) {// other variation of hotel to include price
+  public Hotel(String name, int numrooms, double price, int type) {// other variation of hotel to include price
 
-    this.name = name;
-    this.rooms = new ArrayList<Room>();
-    for (int i = 0; i < numrooms; i++)
-      this.rooms.add(new Room(i + 100, price));
+    int Amounteach = numrooms / 3;
+    int i, j, k;
+    // use numrooms to construct all rooms using a for loop
+    switch(type){
+      case 1:
+        this.name = name;
+        this.rooms = new ArrayList<>();
+        for (i = 0; i < numrooms; i++)
+          this.rooms.add(new standardRoom(i + 100, price));
+        break;
+      case 2:
+        this.name = name;
+        this.rooms = new ArrayList<>();
+        for(i = 0; i < Amounteach; i++){
+          this.rooms.add(new standardRoom(i + 100, price));
+        }
+        for(j = i ; j < Amounteach * 2; j++)
+          this.rooms.add(new executiveRoom(j + 100, price));
+        for(k = j; k < Amounteach * 3; k++)
+          this.rooms.add(new deluxeRoom(k + 100, price));
 
+        while(k < numrooms)
+        {
+          this.rooms.add(new deluxeRoom(k + 100, price));
+          k++;
+        }
+        break;
+    }
   }
-
   /**
    * Default constructor for creating an empty hotel.
    */
   public Hotel() {
-    this.rooms = new ArrayList<Room>();
+    this.rooms = new ArrayList<>();
 
   }
 
@@ -83,20 +129,31 @@ public class Hotel {
    * @param ID the ID of the new room
    * @param scan the scanner passed from main
    */
-  public void addRoom(int ID, Scanner scan) {
+  public void addRoom(int ID, Scanner scan, int model) {
     if (isUniqueRoom(ID)) {
-        System.out.print("Are you sure you want to add room: " + ID + "? (Y/N) ");
-        char choice = scan.next().charAt(0);
-        if (choice == 'y' || choice == 'Y') {
-            rooms.add(new Room(ID, rooms.get(0).getPrice()));
-            System.out.println("\n>>  Room added successfully.  <<\n");
-        } else {
-            System.out.println("\n>>  Modification discarded.  <<\n");
+      System.out.print("Are you sure you want to add room: " + ID + "? (Y/N) ");
+      char choice = scan.next().charAt(0);
+      if (choice == 'y' || choice == 'Y') {
+        switch(model){
+          case 1:
+            rooms.add(new standardRoom(ID, rooms.getFirst().getPrice()));
+            break;
+          case 2:
+            rooms.add(new deluxeRoom(ID, rooms.getFirst().getPrice()));
+            break;
+          case 3:
+            rooms.add(new executiveRoom(ID, rooms.getFirst().getPrice()));
+            break;
         }
+        System.out.println("\n>>  Room added successfully.  <<\n");
+      } else {
+        System.out.println("\n>>  Modification discarded.  <<\n");
+      }
     } else {
-        System.out.println("\n>>  Room name already exists.  <<\n");
+      System.out.println("\n>>  Room name already exists.  <<\n");
     }
-}
+  }
+
 
 
   /**
@@ -302,9 +359,18 @@ public class Hotel {
               System.out.println(">>        Please enter an ID fit to our standard (100, 101, 102 ... 199)      <<");
             } else {
               scan.nextLine();
-              addRoom(newRoomID, scan);
+              System.out.println("1. Standard Room");
+              System.out.println("2. Deluxe Room");
+              System.out.println("3. Executive Room");
+              System.out.print("Enter room type: ");
+              int model = scan.nextInt();
+              while(model < 1 || model > 3)
+              {
+                System.out.print("Invalid input, please choose from 1-3.");
+                model = scan.nextInt();
+              }
+              addRoom(newRoomID, scan, model);
             }
-
           }
 
         } else {
@@ -355,7 +421,7 @@ public class Hotel {
 
     int roomindex;
     int column = 5;
-    ArrayList<Integer> removable = new ArrayList<Integer>();
+    ArrayList<Integer> removable = new ArrayList<>();
     for (int i = 0; i < rooms.size(); i++) {
       if (rooms.get(i).getReservations().isEmpty())
         removable.add(rooms.get(i).getID());//store all IDs into the removable arraylist, which can then be used to make prettier
@@ -387,7 +453,7 @@ public class Hotel {
         roomindex = searchRoom(room);
     }
 
-    if (rooms.get(roomindex).getReservations().size() > 0)// for room with reservations
+    if (!rooms.get(roomindex).getReservations().isEmpty())// for room with reservations
     {
       System.out.println(">>        Room selected has active reservations, please remove them first     <<");
     } else// for actual room removal
@@ -561,6 +627,7 @@ public class Hotel {
   public void simulateBooking(Scanner scan) {
     int checkin = 0;
     int checkout = 0;
+    double price;
     System.out.print("Enter Check-in date (1-30):");
     checkin = scan.nextInt();
     scan.nextLine(); // Consume newline
@@ -594,13 +661,24 @@ public class Hotel {
       mechanismChoice = scan.nextInt();
       scan.nextLine();
     }
+    //Type of room to book
+    System.out.println("1. Standard Room");
+    System.out.println("2. Executive Room");
+    System.out.println("3. Deluxe Room");
+    System.out.print("Which tier of room would you like to book? (1-3): ");
+    int Roomtype = scan.nextInt();
+    while(Roomtype < 1 || Roomtype > 3)
+    {
+      System.out.print("Invalid input. please try again (1-3): ");
+      Roomtype = scan.nextInt();
+    }
 
     Room availableRoom = null; // Initialize to null, will later store a reference to an available room
 
     if (mechanismChoice == 1) {
       // Automated mechanism
       System.out.println("Automated mechanism selected...");
-      availableRoom = selectAutomatically(checkin, checkout);
+      availableRoom = selectAutomatically(checkin, checkout, Roomtype);
 
       if (availableRoom != null) {
         System.out.println("Booked room " + availableRoom.getID() + " successfully!");
@@ -611,7 +689,7 @@ public class Hotel {
     } else if (mechanismChoice == 2) {
       // Manual mechanism
       System.out.println("Manual mechanism selected...");
-      availableRoom = selectManually(checkin, checkout, scan);
+      availableRoom = selectManually(checkin, checkout, scan, Roomtype);
 
       if (availableRoom != null) {
         System.out.println("Selected room " + availableRoom.getID() + " successfully!");
@@ -627,14 +705,38 @@ public class Hotel {
       String guestName = scan.nextLine();
       availableRoom.addReservation(guestName, checkin, checkout);
       int numNights = checkout - checkin;
-      double price = numNights * availableRoom.getPrice();
-      
+
+      System.out.print("Do you have a discount code? (Y/N): ");
+      char discountChoice = scan.next().charAt(0);
+      if (discountChoice == 'Y' || discountChoice == 'y')
+      {
+        System.out.print("Code: ");
+        String code = scan.nextLine();
+        if(code.equals("I_WORK_HERE"))
+          price = availableRoom.getPrice() * numNights * 0.9;
+        else if(code.equals("STAY4_GET1") && numNights > 4)
+          price = availableRoom.getPrice() * (numNights - 1);
+        else if (code.equals("PAYDAY") && (availableRoom.getAvailability(15) || availableRoom.getAvailability(30)))
+          price = (availableRoom.getPrice() * numNights) - (availableRoom.getPrice() * numNights * 0.07);
+        else if (code.equals("PAYDAY") && !(availableRoom.getAvailability(15) || availableRoom.getAvailability(30)))
+        {
+          System.out.print("Day 15 or 30 should be included as a checkin time. Default price will be applied with no discounts.\n");
+          price = numNights * availableRoom.getPrice();
+        }
+        else
+          price = numNights * availableRoom.getPrice();
+      }
+      // put the flags here, if else etc
+      else
+      {
+        price = numNights * availableRoom.getPrice();
+      }
+
       System.out.println("\nBooking successful for guest " + guestName + " in room " + availableRoom.getID());
       System.out.printf("Total price after booking %d nights: $%.2f\n", numNights, price);
-
+      availableRoom.addTotalPrice(price);
     }
   }
-
   /**
    * Method for finding an available room for a given check-in and check-out
    * dates.
@@ -643,7 +745,7 @@ public class Hotel {
    * @param checkout the check-out date
    * @return the available room, or null if no rooms are available
    */
-  private Room selectAutomatically(int checkin, int checkout) {
+  private Room selectAutomatically(int checkin, int checkout, int type) {
     for (int i = 0; i < rooms.size(); i++) {
       boolean available = true;
       for (int day = checkin - 1; day < checkout - 1; day++) {
@@ -652,9 +754,13 @@ public class Hotel {
           break;
         }
       }
-      if (available) {
+      if (available && type == 1 && rooms.get(i).getType().equals("standardRoom")){
         return rooms.get(i);
       }
+      else if(available && type == 2 && rooms.get(i).getType().equals("executiveRoom"))
+        return rooms.get(i);
+      else if(available && type == 3 && rooms.get(i).getType().equals("deluxeRoom"))
+        return rooms.get(i);
     }
     return null;
   }
@@ -667,8 +773,10 @@ public class Hotel {
    * @param scan the scanner passed from main
    * @return the selected room, or null if no rooms are available
    */
-  private Room selectManually(int checkin, int checkout, Scanner scan) {
-    ArrayList<Room> availableRooms = new ArrayList<Room>();
+  private Room selectManually(int checkin, int checkout, Scanner scan, int type) {
+    ArrayList<Room> availableStandardRooms = new ArrayList<Room>();
+    ArrayList<Room> availableDeluxeRooms = new ArrayList<Room>();
+    ArrayList<Room> availableExecutiveRooms = new ArrayList<Room>();
     for (int i = 0; i < rooms.size(); i++) {
       boolean available = true;
       for (int day = checkin - 1; day < checkout - 1; day++) {
@@ -678,21 +786,37 @@ public class Hotel {
         }
       }
       if (available) {
-        availableRooms.add(rooms.get(i));
-        System.out.println("(" + (availableRooms.size()) + ".) Room " + rooms.get(i).getID());
+        if (rooms.get(i).getType() == "standardRoom" && type == 1)
+        {
+          availableStandardRooms.add(rooms.get(i));
+          System.out.println("(" + (availableStandardRooms.size()) + ".) Room " + rooms.get(i).getID());
+        }
+        else if(rooms.get(i).getType() == "executiveRoom" && type == 2)
+        {
+          availableExecutiveRooms.add(rooms.get(i));
+          System.out.println("(" + (availableExecutiveRooms.size()) + ".) Room " + rooms.get(i).getID());
+        }
+        else if(rooms.get(i).getType() == "deluxeRoom" && type == 3)
+        {
+          availableDeluxeRooms.add(rooms.get(i));
+          System.out.println("(" + (availableDeluxeRooms.size()) + ".) Room " + rooms.get(i).getID());
+        }
       }
     }
 
-    if (availableRooms.size() > 0) {
+    if (availableStandardRooms.size() > 0 || availableExecutiveRooms.size() > 0 || availableDeluxeRooms.size() > 0) {
       boolean validChoice = false;
       while (!validChoice) {
         System.out.print("Select a room(number on the left side): ");
         int roomChoice = scan.nextInt();
-        scan.nextLine(); // Consume newline
-
-        if (roomChoice > 0 && roomChoice <= availableRooms.size()) {
-          return availableRooms.get(roomChoice - 1);
-        } else {
+        scan.nextLine();// Consume newline
+        if (roomChoice > 0 && roomChoice <= availableStandardRooms.size() && type == 1 && availableStandardRooms.get(roomChoice - 1).getType().equals("standardRoom"))
+          return availableStandardRooms.get(roomChoice - 1);
+        else if(roomChoice > 0 && roomChoice <= availableExecutiveRooms.size() && type == 2 && availableExecutiveRooms.get(roomChoice - 1).getType().equals("executiveRoom"))
+          return availableExecutiveRooms.get(roomChoice - 1);
+        else if(roomChoice > 0 && roomChoice <= availableDeluxeRooms.size() && type == 3 && availableDeluxeRooms.get(roomChoice - 1).getType().equals("deluxeRoom"))
+          return availableDeluxeRooms.get(roomChoice - 1);
+        else {
           System.out.println("Invalid choice, try again.");
         }
       }

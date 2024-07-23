@@ -104,7 +104,14 @@ public static void createHotel(Scanner scan) {
             }
         }
     }
-
+    System.out.println("1. all standard rooms");
+    System.out.println("2. has all the rooms (standard,executive & deluxe)");
+    System.out.print("Enter type of room creation: ");
+    int type = scan.nextInt();
+    while (type < 1 || type > 2)
+    {
+        System.out.print("Invalid type. Try Again (1-2): ");
+    }
     System.out.println("Enter number of rooms (1-50):");
     int numRooms = scan.nextInt();
     scan.nextLine(); // consume newline
@@ -115,50 +122,50 @@ public static void createHotel(Scanner scan) {
         numRooms = scan.nextInt();
         scan.nextLine(); // consume newline
     }
-  System.out.println("Do you wish to add a custom price for the rooms? (Y/N)");
-  char choice = scan.next().charAt(0);
-  scan.nextLine();
-
-  while(choice != 'Y' && choice != 'N' && choice != 'y' && choice != 'n'){
-    System.out.println("Invalid choice. Please enter Y or N: ");
-    choice = scan.next().charAt(0);
+    System.out.println("Do you wish to add a custom price for the rooms? (Y/N)");
+    char choice = scan.next().charAt(0);
     scan.nextLine();
 
-  }
+    while(choice != 'Y' && choice != 'N' && choice != 'y' && choice != 'n'){
+        System.out.println("Invalid choice. Please enter Y or N: ");
+        choice = scan.next().charAt(0);
+        scan.nextLine();
 
-  switch (choice){
-    case 'Y':
-    case 'y':
-      System.out.println("Enter the custom price for each room:");
-      double customPrice = scan.nextDouble();
-      scan.nextLine(); 
+    }
 
-      //check if custom price is valid
-      while (customPrice < 100){
-        System.out.println("Invalid custom price. please enter a price greater than or equal to 100: ");
-        customPrice = scan.nextDouble();
-        scan.nextLine(); 
-      }
+    switch (choice){
+        case 'Y':
+        case 'y':
+            System.out.println("Enter the custom price for each room:");
+            double customPrice = scan.nextDouble();
+            scan.nextLine();
 
-      hotel = new Hotel(name, numRooms, customPrice);
-      hotels.add(hotel);
+            //check if custom price is valid
+            while (customPrice < 100){
+                System.out.println("Invalid custom price. please enter a price greater than or equal to 100: ");
+                customPrice = scan.nextDouble();
+                scan.nextLine();
+            }
 
-      System.out.println("\nHotel named \"" + name + "\" created successfully with " + numRooms + " rooms.");
-      System.out.println("Custom Price of " + customPrice + " added to each room.\n");
+            hotel = new Hotel(name, numRooms, customPrice, type);
+            hotels.add(hotel);
 
-      break;
-    case 'N':
-    case 'n':
-      System.out.println("Default price selected.");
-      hotel = new Hotel(name, numRooms);
-      hotels.add(hotel);
+            System.out.println("\nHotel named \"" + name + "\" created successfully with " + numRooms + " rooms.");
+            System.out.println("Custom Price of " + customPrice + " added to each room.\n");
 
-      System.out.println("\nHotel named \"" + name + "\" created successfully with " + numRooms + " rooms.");
-      System.out.println("Default Price of " + 1299.0 + " added to each room.\n");
+            break;
+        case 'N':
+        case 'n':
+            System.out.println("Default price selected.");
+            hotel = new Hotel(name, numRooms, type);
+            hotels.add(hotel);
 
-      break;
+            System.out.println("\nHotel named \"" + name + "\" created successfully with " + numRooms + " rooms.");
+            System.out.println("Default Price of " + 1299.0 + " added to each room.\n");
 
-    default: System.out.println(">>    Invalid choice. please try again.    <<");
+            break;
+
+        default: System.out.println(">>    Invalid choice. please try again.    <<");
     }
 
 
