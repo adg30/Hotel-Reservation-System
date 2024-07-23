@@ -1,30 +1,89 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class HotelController {
-    private Hotel model;
-    private HotelView view;
+  private ArrayList<Hotel> hotels;
+  private HotelView view;
 
-    public HotelController(Hotel model, HotelView view) {
-        this.model = model;
-        this.view = view;
+  public HotelController(ArrayList<Hotel> hotels, HotelView view) {
+    this.hotels = hotels;
+    this.view = view;
 
-        // Add listeners to the view
-        this.view.addCreateHotelListener(new CreateHotelListener());
+    this.view.addAddButtonListener(new AddButtonListener());
+    this.view.addManageButtonListener(new ManageButtonListener());
+    this.view.addViewButtonListener(new ViewButtonListener());
+    this.view.addBookButtonListener(new BookButtonListener());
+    this.view.addExitButtonListener(new ExitButtonListener());
+  }
+
+  class AddButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      String name = view.getHotelName();
+      int numRooms = view.getNumRooms();
+      double price = view.getRoomPrice();
+
+      if (name.isEmpty() || numRooms <= 0 || price <= 0) {
+        view.setDisplayText("Invalid input. Please enter valid hotel details.");
+        return;
+      }
+
+      hotels.add(new Hotel(name, numRooms, price));
+      view.setDisplayText("Hotel added successfully.");
     }
+  }
 
-    class CreateHotelListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String hotelName = view.getHotelName();
-            int numRooms = view.getNumRooms();
+  class ManageButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      if (hotels.isEmpty()) {
+        view.setDisplayText("No hotels available to manage.");
+        return;
+      }
 
-            if (hotelName.isEmpty() || numRooms <= 0) {
-                view.setOutputText("Invalid input. Please enter a valid hotel name and number of rooms.");
-                return;
-            }
-
-            model = new Hotel(hotelName, numRooms);
-            view.setOutputText("Hotel created: " + hotelName + " with " + numRooms + " rooms.");
-        }
+      StringBuilder builder = new StringBuilder("Available hotels:\n");
+      for (int i = 0; i < hotels.size(); i++) {
+        builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
+      }
+      view.setDisplayText(builder.toString());
+      // Additional logic to manage hotels can be added here
     }
+  }
+
+  class ViewButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      if (hotels.isEmpty()) {
+        view.setDisplayText("No hotels available to view.");
+        return;
+      }
+
+      StringBuilder builder = new StringBuilder("Available hotels:\n");
+      for (int i = 0; i < hotels.size(); i++) {
+        builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
+      }
+      view.setDisplayText(builder.toString());
+      // Additional logic to view hotels can be added here
+    }
+  }
+
+  class BookButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      if (hotels.isEmpty()) {
+        view.setDisplayText("No hotels available to book.");
+        return;
+      }
+
+      StringBuilder builder = new StringBuilder("Available hotels:\n");
+      for (int i = 0; i < hotels.size(); i++) {
+        builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
+      }
+      view.setDisplayText(builder.toString());
+      // Additional logic to book rooms can be added here
+    }
+  }
+
+  class ExitButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      System.exit(0);
+    }
+  }
 }
