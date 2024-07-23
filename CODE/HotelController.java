@@ -46,7 +46,7 @@ public class HotelController {
         builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
       }
       view.setDisplayText(builder.toString());
-      // Additional logic to manage hotels can be added here
+      // TODO: COMPLETE managehotel
     }
   }
 
@@ -62,7 +62,7 @@ public class HotelController {
         builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
       }
       view.setDisplayText(builder.toString());
-      // Additional logic to view hotels can be added here
+      // TODO: COMPLETE viewHotel
     }
   }
 
@@ -78,10 +78,10 @@ public class HotelController {
         builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
       }
       view.setDisplayText(builder.toString());
-      // Additional logic to book rooms can be added here
+      // TODO: COMPLETE simulateBooking
     }
   }
-
+  //TODO: go over the initial hotel finder for choosing
   class SearchButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       String query = view.getSearchQuery().toLowerCase();
