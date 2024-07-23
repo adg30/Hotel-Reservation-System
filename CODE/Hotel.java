@@ -706,6 +706,7 @@ public class Hotel {
 
       System.out.print("Do you have a discount code? (Y/N): ");
       char discountChoice = scan.next().charAt(0);
+      scan.nextLine();
       if (discountChoice == 'Y' || discountChoice == 'y')
       {
         System.out.print("Code: ");
