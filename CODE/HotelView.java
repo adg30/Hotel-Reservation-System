@@ -1,18 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class HotelView extends JFrame {
   private JTextField hotelNameField;
   private JTextField numRoomsField;
   private JTextField roomPriceField;
+  private JTextField searchField;
   private JTextArea displayArea;
   private JButton addButton;
   private JButton manageButton;
   private JButton viewButton;
   private JButton bookButton;
+  private JButton searchButton;
   private JButton exitButton;
 
   public HotelView() {
@@ -21,7 +21,7 @@ public class HotelView extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
 
-    JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+    JPanel inputPanel = new JPanel(new GridLayout(5, 2)); // Adjusted layout to fit search field and button
     inputPanel.add(new JLabel("Hotel Name:"));
     hotelNameField = new JTextField();
     inputPanel.add(hotelNameField);
@@ -34,6 +34,10 @@ public class HotelView extends JFrame {
     roomPriceField = new JTextField();
     inputPanel.add(roomPriceField);
 
+    inputPanel.add(new JLabel("Search Hotel:")); // Added search field
+    searchField = new JTextField();
+    inputPanel.add(searchField);
+
     addButton = new JButton("Add Hotel");
     inputPanel.add(addButton);
 
@@ -45,10 +49,12 @@ public class HotelView extends JFrame {
     manageButton = new JButton("Manage Hotel");
     viewButton = new JButton("View Hotel");
     bookButton = new JButton("Book Room");
+    searchButton = new JButton("Search"); // Added search button
     exitButton = new JButton("Exit");
     buttonPanel.add(manageButton);
     buttonPanel.add(viewButton);
     buttonPanel.add(bookButton);
+    buttonPanel.add(searchButton); // Added search button to panel
     buttonPanel.add(exitButton);
 
     add(inputPanel, BorderLayout.NORTH);
@@ -76,6 +82,10 @@ public class HotelView extends JFrame {
     }
   }
 
+  public String getSearchQuery() {
+    return searchField.getText();
+  }
+
   public void setDisplayText(String text) {
     displayArea.setText(text);
   }
@@ -98,6 +108,10 @@ public class HotelView extends JFrame {
 
   public void addBookButtonListener(ActionListener listener) {
     bookButton.addActionListener(listener);
+  }
+
+  public void addSearchButtonListener(ActionListener listener) {
+    searchButton.addActionListener(listener);
   }
 
   public void addExitButtonListener(ActionListener listener) {

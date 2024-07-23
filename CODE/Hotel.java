@@ -53,6 +53,7 @@ public class Hotel {
 
   }
 
+
   /**
    * Gets the name of the hotel.
    *
@@ -60,6 +61,33 @@ public class Hotel {
    */
   public String getName() {
     return this.name;
+  }
+
+  /**
+   * Gets the number of rooms for the hotel.
+   *
+   * @return the number of rooms of the hotel
+   */
+  public int getNumRooms() {
+    return this.rooms.size();
+  }
+
+  /** TODO: CHANGE THIS TO THE NEW ONE WHICH HAS DIFFERENT STUFFS
+   * Gets the price of the hotel rooms.
+   *
+   * @return the price for the rooms of the hotel
+   */
+  public double getRoomPrice() {
+    return this.rooms.get(1).getPrice();
+  }
+
+  /**
+   * Gets the rooms of the hotel.
+   *
+   * @return an arraylist containing the rooms of the hotel
+   */
+  public ArrayList<Room> getRooms() {
+    return this.rooms;
   }
 
   /**

@@ -14,6 +14,7 @@ public class HotelController {
     this.view.addManageButtonListener(new ManageButtonListener());
     this.view.addViewButtonListener(new ViewButtonListener());
     this.view.addBookButtonListener(new BookButtonListener());
+    this.view.addSearchButtonListener(new SearchButtonListener());
     this.view.addExitButtonListener(new ExitButtonListener());
   }
 
@@ -78,6 +79,34 @@ public class HotelController {
       }
       view.setDisplayText(builder.toString());
       // Additional logic to book rooms can be added here
+    }
+  }
+
+  class SearchButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      String query = view.getSearchQuery().toLowerCase();
+
+      if (query.isEmpty()) {
+        view.setDisplayText("Please enter a hotel name to search.");
+        return;
+      }
+
+      StringBuilder builder = new StringBuilder("Search results:\n");
+      boolean found = false;
+      for (Hotel hotel : hotels) {
+        if (hotel.getName().toLowerCase().contains(query)) {
+          builder.append("Hotel Name: ").append(hotel.getName())
+                 .append(", Rooms: ").append(hotel.getNumRooms())
+                 .append(", Price: $").append(hotel.getRoomPrice()).append("\n");
+          found = true;
+        }
+      }
+
+      if (!found) {
+        builder.append("No hotels found with the name '").append(query).append("'.");
+      }
+
+      view.setDisplayText(builder.toString());
     }
   }
 
