@@ -162,12 +162,10 @@ public class Hotel {
    * @return the total revenue
    */
   public double sumTotal() {
-    int i, j;
+    int i;
     double sum = 0;
     for (i = 0; i < rooms.size(); i++) {
-      for (j = 0; j < rooms.get(i).getReservations().size(); j++) {
-        sum += rooms.get(i).getReservations().get(j).getTotalPrice(); // adds all the reservations totalprice to sum
-      }
+      sum += rooms.get(i).getTotalPrice(); // adds all the rooms totalprice to sum
     }
     return sum;
   }
