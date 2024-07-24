@@ -9,12 +9,18 @@ public class HotelView extends JFrame {
 
     public HotelView() {
         setTitle("Hotel Management System");
-        setSize(400, 500);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);  // Center the window
 
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(5, 2));
+        // Create a main panel with BorderLayout
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10)); // 10px padding
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // 10px padding around the panel
 
+        // Create an input panel with GridLayout
+        JPanel inputPanel = new JPanel(new GridLayout(6, 2, 10, 10)); // 10px padding between components
+
+        // Add labels and text fields to the input panel
         inputPanel.add(new JLabel("Hotel Name:"));
         hotelNameField = new JTextField();
         inputPanel.add(hotelNameField);
@@ -35,6 +41,9 @@ public class HotelView extends JFrame {
         searchField = new JTextField();
         inputPanel.add(searchField);
 
+        // Create a button panel with GridLayout
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 2, 10, 10)); // 4 rows, 2 columns, 10px padding
+
         createButton = new JButton("Create Hotel");
         manageButton = new JButton("Manage Hotel");
         viewButton = new JButton("View Hotels");
@@ -43,19 +52,27 @@ public class HotelView extends JFrame {
         exitButton = new JButton("Exit");
         modifyDatePriceButton = new JButton("Modify Date Price");
 
-        inputPanel.add(createButton);
-        inputPanel.add(manageButton);
-        inputPanel.add(viewButton);
-        inputPanel.add(bookButton);
-        inputPanel.add(searchButton);
-        inputPanel.add(exitButton);
-        inputPanel.add(modifyDatePriceButton);
+        // Add buttons to the button panel
+        buttonPanel.add(createButton);
+        buttonPanel.add(manageButton);
+        buttonPanel.add(viewButton);
+        buttonPanel.add(bookButton);
+        buttonPanel.add(searchButton);
+        buttonPanel.add(modifyDatePriceButton);
+        buttonPanel.add(exitButton);
 
+        // Add input and button panels to the main panel
+        mainPanel.add(inputPanel, BorderLayout.NORTH);
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        // Create and configure the display area
         displayArea = new JTextArea();
         displayArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(displayArea);
 
-        add(inputPanel, BorderLayout.NORTH);
-        add(new JScrollPane(displayArea), BorderLayout.CENTER);
+        // Add the main panel and display area to the frame
+        add(mainPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     public String getHotelName() {
@@ -85,9 +102,9 @@ public class HotelView extends JFrame {
             return -1;
         }
     }
-    
+
     public String getSearchQuery() {
-      return searchField.getText();
+        return searchField.getText();
     }
 
     public void setDisplayText(String text) {
@@ -120,5 +137,12 @@ public class HotelView extends JFrame {
 
     public void addModifyDatePriceButtonListener(ActionListener listener) {
         modifyDatePriceButton.addActionListener(listener);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            HotelView hv = new HotelView();
+            hv.setVisible(true);
+        });
     }
 }
