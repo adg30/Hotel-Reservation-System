@@ -15,99 +15,48 @@ public class Hotel {
   */
   private ArrayList<Room> rooms = new ArrayList<Room>();
   private ArrayList<Double> DatePrice;
-  /**
-   * Constructs a hotel with a specified name and number of rooms.
-   *
-   * @param name     the name of the hotel
-   * @param numrooms the number of rooms in the hotel
-   */
+  
   public Hotel(String name, int numrooms, int type) {
-    int Amounteach = numrooms / 3;
-    int i, j, k;
-    this.DatePrice = new ArrayList<Double>();
-    for(i = 0; i < 31; i++)
-    {
-      this.DatePrice.add(1.00);
-    }
-    // use numrooms to construct all rooms using a for loop
-    switch(type){
-      case 1:
-        this.name = name;
-        this.rooms = new ArrayList<Room>();
-        for (i = 0; i < numrooms; i++)
-          this.rooms.add(new standardRoom(i + 100, 1299.0));
-        break;
-      case 2:
-        this.name = name;
-        this.rooms = new ArrayList<>();
-        for(i = 0; i < Amounteach; i++){
-          this.rooms.add(new standardRoom(i + 100, 1299.0));
-        }
-        for(j = i ; j < Amounteach * 2; j++)
-          this.rooms.add(new executiveRoom(j + 100, 1299.0));
-        for(k = j; k < Amounteach * 3; k++)
-          this.rooms.add(new deluxeRoom(k + 100, 1299.0));
-
-        while(k < numrooms)
-        {
-          this.rooms.add(new deluxeRoom(k + 100, 1299.0));
-          k++;
-        }
-        break;
-    }
-
+    initializeHotel(name, numrooms, type, 1299.0);
   }
 
-  /**
-   * Constructs a hotel with a specified name, number of rooms, and room price.
-   *
-   * @param name     the name of the hotel
-   * @param numrooms the number of rooms in the hotel
-   * @param price    the price of each room
-   */
-  public Hotel(String name, int numrooms, double price, int type) {// other variation of hotel to include price
-
-    int Amounteach = numrooms / 3;
-    int i, j, k;
-    this.DatePrice = new ArrayList<Double>();
-    for(i = 0; i < 31; i++)
-    {
-      this.DatePrice.add(1.00);
-    }
-    // use numrooms to construct all rooms using a for loop
-    switch(type){
-      case 1:
-        this.name = name;
-        this.rooms = new ArrayList<>();
-        for (i = 0; i < numrooms; i++)
-          this.rooms.add(new standardRoom(i + 100, price));
-        break;
-      case 2:
-        this.name = name;
-        this.rooms = new ArrayList<>();
-        for(i = 0; i < Amounteach; i++){
-          this.rooms.add(new standardRoom(i + 100, price));
-        }
-        for(j = i ; j < Amounteach * 2; j++)
-          this.rooms.add(new executiveRoom(j + 100, price));
-        for(k = j; k < Amounteach * 3; k++)
-          this.rooms.add(new deluxeRoom(k + 100, price));
-
-        while(k < numrooms)
-        {
-          this.rooms.add(new deluxeRoom(k + 100, price));
-          k++;
-        }
-        break;
-    }
+  public Hotel(String name, int numrooms, double price, int type) {
+    initializeHotel(name, numrooms, type, price);
   }
-  /**
-   * Default constructor for creating an empty hotel.
-   */
+
   public Hotel() {
     this.rooms = new ArrayList<>();
-
   }
+
+  private void initializeHotel(String name, int numrooms, int type, double price) {
+    this.name = name;
+    this.rooms = new ArrayList<>();
+    this.DatePrice = new ArrayList<>();
+    for (int i = 0; i < 31; i++) {
+      this.DatePrice.add(1.00);
+    }
+    int amountEach = numrooms / 3;
+    switch (type) {
+      case 1:
+        for (int i = 0; i < numrooms; i++) {
+          this.rooms.add(new standardRoom(i + 100, price));
+        }
+        break;
+      case 2:
+        for (int i = 0; i < amountEach; i++) {
+          this.rooms.add(new standardRoom(i + 100, price));
+        }
+        for (int i = amountEach; i < amountEach * 2; i++) {
+          this.rooms.add(new executiveRoom(i + 100, price));
+        }
+        for (int i = amountEach * 2; i < numrooms; i++) {
+          this.rooms.add(new deluxeRoom(i + 100, price));
+        }
+        break;
+    }
+  }
+
+
 
   /**
    * Gets the name of the hotel.
@@ -139,31 +88,23 @@ public class Hotel {
    * @param ID the ID of the new room
    * @param scan the scanner passed from main
    */
-  public void addRoom(int ID, Scanner scan, int model) {
-    if (isUniqueRoom(ID)) {
-      System.out.print("Are you sure you want to add room: " + ID + "? (Y/N) ");
-      char choice = scan.next().charAt(0);
-      if (choice == 'y' || choice == 'Y') {
+  public void addRoom(int ID, int model) {
         switch(model){
           case 1:
-            rooms.add(new standardRoom(ID, rooms.getFirst().getPrice()));
+            rooms.add(new standardRoom(ID, rooms.get(0).getPrice()));
             break;
           case 2:
-            rooms.add(new deluxeRoom(ID, rooms.getFirst().getPrice()));
+            rooms.add(new deluxeRoom(ID, rooms.get(0).getPrice()));
             break;
           case 3:
-            rooms.add(new executiveRoom(ID, rooms.getFirst().getPrice()));
+            rooms.add(new executiveRoom(ID, rooms.get(0).getPrice()));
             break;
         }
-        System.out.println("\n>>  Room added successfully.  <<\n");
-      } else {
-        System.out.println("\n>>  Modification discarded.  <<\n");
-      }
-    } else {
-      System.out.println("\n>>  Room name already exists.  <<\n");
-    }
   }
 
+  public ArrayList<Room> getRooms(){
+    return rooms;
+  }
 
 
   /**

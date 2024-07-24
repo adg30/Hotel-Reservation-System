@@ -10,6 +10,7 @@ public class HotelView extends JFrame {
   private JTextField hotelNameField;
   private JTextField numRoomsField;
   private JTextField roomPriceField;
+  private JTextField hotelTypeField;
   private JTextField searchField;
   private JTextArea displayArea;
   private JButton addButton;
@@ -52,6 +53,11 @@ public class HotelView extends JFrame {
     inputPanel.add(new JLabel("Room Price:"));
     roomPriceField = new JTextField();
     inputPanel.add(roomPriceField);
+
+    // Add hotel type label and text field to the input panel
+    inputPanel.add(new JLabel("Room Type:"));
+    hotelTypeField = new JTextField();
+    inputPanel.add(hotelTypeField);
 
     // Add search hotel label and text field to the input panel
     inputPanel.add(new JLabel("Search Hotel:"));
@@ -119,6 +125,19 @@ public class HotelView extends JFrame {
       return 0.0;
     }
   }
+
+  /**
+   * Gets the hotel type entered by the user.
+   * @return the room price as an int, or 0 if invalid
+   */
+  public int getHotelType() {
+    try {
+      return Integer.parseInt(hotelTypeField.getText());
+    } catch (NumberFormatException e) {
+      return 0;
+    }
+  }
+
 
   /**
    * Gets the search query entered by the user.
