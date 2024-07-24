@@ -1,5 +1,5 @@
 public class standardRoom extends Room{
     public standardRoom(int ID, double price){
-        super(ID, price, "standardRoom");
+        super(ID, price, 1);
     }
 }
