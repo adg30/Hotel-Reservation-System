@@ -18,64 +18,64 @@ public class HotelReservationSystem {
    * 
    * @param args command line arguments
    */
-  public static void main(String[] args) {
-    int hotelInd = 0;//checks if hotel index is valid
-    int loop = 1;//loop to stop when exit hotel is chosen
+  // public static void main(String[] args) {
+  //   int hotelInd = 0;//checks if hotel index is valid
+  //   int loop = 1;//loop to stop when exit hotel is chosen
 
 
-    while (loop == 1){
-      System.out.println("\n\nWelcome to the Hotel Reservation System!");
-      System.out.println("Please select an option:");
-      System.out.println("1. Create a new hotel");
-      System.out.println("2. View Hotel Information");
-      System.out.println("3. Manage your hotel");
-      System.out.println("4. Simulate Booking");
-      System.out.println("5. Exit");
-      System.out.print("Your choice: ");
+  //   while (loop == 1){
+  //     System.out.println("\n\nWelcome to the Hotel Reservation System!");
+  //     System.out.println("Please select an option:");
+  //     System.out.println("1. Create a new hotel");
+  //     System.out.println("2. View Hotel Information");
+  //     System.out.println("3. Manage your hotel");
+  //     System.out.println("4. Simulate Booking");
+  //     System.out.println("5. Exit");
+  //     System.out.print("Your choice: ");
 
-      int choice = scan.nextInt();
-      scan.nextLine();
+  //     int choice = scan.nextInt();
+  //     scan.nextLine();
 
-      switch (choice){
-        case 1: 
-          System.out.println("Creating Hotel...");
-          createHotel(scan);//pass scanner into the methods
-          break;
+  //     switch (choice){
+  //       case 1: 
+  //         System.out.println("Creating Hotel...");
+  //         createHotel(scan);//pass scanner into the methods
+  //         break;
 
-        case 2://viewHotel
-          System.out.println("View Hotel selected...");
-          hotelInd = getHotel(scan);
-          if (hotelInd != -1)
-            hotels.get(hotelInd).viewHotel(scan);
+  //       case 2://viewHotel
+  //         System.out.println("View Hotel selected...");
+  //         hotelInd = getHotel(scan);
+  //         if (hotelInd != -1)
+  //           hotels.get(hotelInd).viewHotel(scan);
 
-          break;
+  //         break;
 
-        case 3://manageHotel
-          System.out.println("Manage Hotel selected...");
-          hotelInd = getHotel(scan);
-          if (hotelInd != -1)
-            hotels.get(hotelInd).Manage(hotels, scan);
-          break;
+  //       case 3://manageHotel
+  //         System.out.println("Manage Hotel selected...");
+  //         hotelInd = getHotel(scan);
+  //         if (hotelInd != -1)
+  //           hotels.get(hotelInd).Manage(hotels, scan);
+  //         break;
 
-        case 4://simulateBooking
-          System.out.println("Simulate Booking selected...");
-          hotelInd = getHotel(scan);
-          if (hotelInd != -1)
-            hotels.get(hotelInd).simulateBooking(scan);
-          break;
+  //       case 4://simulateBooking
+  //         System.out.println("Simulate Booking selected...");
+  //         hotelInd = getHotel(scan);
+  //         if (hotelInd != -1)
+  //           hotels.get(hotelInd).simulateBooking(scan);
+  //         break;
 
-        case 5:
-          System.out.println("Thank you for using the hotel reservation system!");
-          System.out.println("Exiting Hotel Reservation System...");
-          scan.close();//finally close scanner when program finishes
-          loop = 0;
-          break;
+  //       case 5:
+  //         System.out.println("Thank you for using the hotel reservation system!");
+  //         System.out.println("Exiting Hotel Reservation System...");
+  //         scan.close();//finally close scanner when program finishes
+  //         loop = 0;
+  //         break;
 
-        default: System.out.println(">>    invalid choice, please try again.    <<");
-      }
+  //       default: System.out.println(">>    invalid choice, please try again.    <<");
+  //     }
 
-    }
-  }
+  //   }
+  // }
 /**
 *Creates a new Hotel
 *
