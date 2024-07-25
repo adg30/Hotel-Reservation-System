@@ -64,13 +64,13 @@ public class BookButtonListener extends BaseButtonListener {
                 percentage += hotel.getDatePrice().get(checkin - 1);
                 checkin++;
             }
-    
+            //TODO:error checking for char
             char discountChoice = getCharInput("Do you have a discount code? (Y/N):");
     
             if (discountChoice == 'Y' || discountChoice == 'y') {
                 String code = JOptionPane.showInputDialog("Enter discount code:");
                 price = applyDiscount(hotel, code, availableRoom, percentage, numNights, firstdate);
-            } else {
+            } else {//TODO: make it say an error message, dont just give them the normal prce
                 price = percentage * availableRoom.getPrice();
             }
     
@@ -91,7 +91,7 @@ public class BookButtonListener extends BaseButtonListener {
           return null;
       }
     
-      private Room selectManually(int checkin, int checkout, int type) {
+      private Room selectManually(int checkin, int checkout, int type) {//TODO:go over this
           StringBuilder availableRoomsStr = new StringBuilder("Available rooms:\n");
           int roomCount = 0;
     
