@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class HotelView extends JFrame {
     private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField;
-    private JButton createButton, manageButton, viewButton, bookButton, searchButton, exitButton, modifyDatePriceButton;
+    private JButton createButton, manageButton, viewButton, bookButton, searchButton, exitButton;
     private JTextArea displayArea;
 
     public HotelView() {
@@ -46,7 +46,6 @@ public class HotelView extends JFrame {
         bookButton = new JButton("Book Room");
         searchButton = new JButton("Search Hotel");
         exitButton = new JButton("Exit");
-        modifyDatePriceButton = new JButton("Modify Date Price");
 
         // Add buttons to the button panel
         buttonPanel.add(createButton);
@@ -54,27 +53,17 @@ public class HotelView extends JFrame {
         buttonPanel.add(viewButton);
         buttonPanel.add(bookButton);
         buttonPanel.add(searchButton);
-        buttonPanel.add(modifyDatePriceButton);
         buttonPanel.add(exitButton);
 
         // Add input and button panels to the main panel
         mainPanel.add(inputPanel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        // Create and configure the display area + testing
-        displayArea = new JTextArea();
-        displayArea.setEditable(false);
-        displayArea.setLineWrap(true);
-        displayArea.setWrapStyleWord(true);
-        displayArea.setPreferredSize(new Dimension(600, 200));
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 
-
-        // Add the main panel and display area to the frame
+        // Add the main panel to the frame 
         add(mainPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+  
     }
 
     public String getHotelName() {
@@ -106,7 +95,15 @@ public class HotelView extends JFrame {
     }
 
     public void setDisplayText(String text) {
-        displayArea.setText(text);
+        JTextArea displayArea = new JTextArea(text);
+        displayArea.setEditable(false);
+        displayArea.setLineWrap(true);
+        displayArea.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+
+        JOptionPane.showMessageDialog(this, scrollPane, "Display", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void addCreateButtonListener(ActionListener listener) {
@@ -133,8 +130,5 @@ public class HotelView extends JFrame {
         exitButton.addActionListener(listener);
     }
 
-    public void addModifyDatePriceButtonListener(ActionListener listener) {
-        modifyDatePriceButton.addActionListener(listener);
-    }
 
 }
