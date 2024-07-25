@@ -10,39 +10,16 @@ public class ManageButtonListener extends BaseButtonListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (hotels.isEmpty()) {
-        view.setDisplayText("No hotels available to manage.");
-        return;
-      }
-
-      StringBuilder builder = new StringBuilder("Available hotels:\n");
-      for (int i = 0; i < hotels.size(); i++) {
-        builder.append((i + 1)).append(". ").append(hotels.get(i).getName()).append("\n");
-      }
-      view.setDisplayText(builder.toString());
-
-      String input = JOptionPane.showInputDialog(view, "Enter the number of the hotel to manage:");
-      int index;
-      try {
-        index = Integer.parseInt(input) - 1;
-      } catch (NumberFormatException ex) {
-        view.setDisplayText("Invalid input.");
-        return;
-      }
-
-      if (index < 0 || index >= hotels.size()) {
-        view.setDisplayText("Invalid hotel number.");
-        return;
-      }
-
-      manageHotel(index);
+        Hotel selectedHotel = selectHotel(hotels, view, "Manage Hotel", "Select a hotel to manage:");
+        if (selectedHotel != null) {
+            manageHotel(selectedHotel);
+        }
       
     }
 
   
 
-  public void manageHotel(int index) {
-    Hotel hotel = hotels.get(index);
+  public void manageHotel(Hotel hotel) {
 
     String[] options = {
             "Change Hotel Name",
@@ -75,7 +52,7 @@ public class ManageButtonListener extends BaseButtonListener {
             removeReservation(hotel);
             break;
         case 5:
-            removeHotel(index);
+            removeHotel(hotel);
             break;
         case 6:
             DatePriceModify(hotel);
@@ -209,10 +186,10 @@ public class ManageButtonListener extends BaseButtonListener {
   }
 
 
-  private void removeHotel(int index) {
-      int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotels.get(index).getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
+  private void removeHotel(Hotel hotel) {
+      int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotel.getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
       if (confirm == JOptionPane.YES_OPTION) {
-          hotels.remove(index);
+          hotels.remove(hotel);
           view.setDisplayText("Hotel removed successfully.");
       } else {
           view.setDisplayText("Hotel removal cancelled.");

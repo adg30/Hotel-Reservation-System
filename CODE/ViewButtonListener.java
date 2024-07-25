@@ -11,27 +11,10 @@ public class ViewButtonListener extends BaseButtonListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (hotels.isEmpty()) {
-            view.setDisplayText("No hotels available to view.");
-            return;
+        Hotel selectedHotel = selectHotel(hotels, view, "View Hotel", "Select a hotel to view:");
+        if (selectedHotel != null) {
+            viewHotel(selectedHotel);
         }
-
-        String[] hotelNames = hotels.stream().map(Hotel::getName).toArray(String[]::new);
-        String selectedHotelName = (String) JOptionPane.showInputDialog(view, "Select a hotel to view:",
-                "View Hotel", JOptionPane.PLAIN_MESSAGE, null, hotelNames, hotelNames[0]);
-
-        if (selectedHotelName == null) {
-            view.setDisplayText("No hotel selected.");
-            return;
-        }
-
-        Hotel selectedHotel = hotels.stream().filter(hotel -> hotel.getName().equals(selectedHotelName)).findFirst().orElse(null);
-        if (selectedHotel == null) {
-            view.setDisplayText("Hotel not found.");
-            return;
-        }
-
-        viewHotel(selectedHotel);
     }
   
 

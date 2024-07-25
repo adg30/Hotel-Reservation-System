@@ -9,26 +9,10 @@ public class BookButtonListener extends BaseButtonListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (hotels.isEmpty()) {
-            view.setDisplayText("No hotels available to modify date prices.");
-            return;
+        Hotel selectedHotel = selectHotel(hotels, view, "Simulate Hotel Booking", "Select a hotel to simulate:");
+        if (selectedHotel != null) {
+            simulateBooking(selectedHotel);
         }
-
-        String input = JOptionPane.showInputDialog(view, "Enter the number of the hotel to modify date prices:");
-        int index;
-        try {
-            index = Integer.parseInt(input) - 1;
-        } catch (NumberFormatException ex) {
-            view.setDisplayText("Invalid input.");
-            return;
-        }
-
-        if (index < 0 || index >= hotels.size()) {
-            view.setDisplayText("Invalid hotel number.");
-            return;
-        }
-
-        simulateBooking(hotels.get(index));
     }
 
     public void simulateBooking(Hotel hotel) {

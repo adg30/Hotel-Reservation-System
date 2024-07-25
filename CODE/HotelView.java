@@ -3,7 +3,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class HotelView extends JFrame {
-    private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField, searchField;
+    private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField;
     private JButton createButton, manageButton, viewButton, bookButton, searchButton, exitButton, modifyDatePriceButton;
     private JTextArea displayArea;
 
@@ -37,10 +37,6 @@ public class HotelView extends JFrame {
         hotelTypeField = new JTextField();
         inputPanel.add(hotelTypeField);
 
-        inputPanel.add(new JLabel("Search Hotel:"));
-        searchField = new JTextField();
-        inputPanel.add(searchField);
-
         // Create a button panel with GridLayout
         JPanel buttonPanel = new JPanel(new GridLayout(4, 2, 10, 10)); // 4 rows, 2 columns, 10px padding
 
@@ -65,10 +61,16 @@ public class HotelView extends JFrame {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        // Create and configure the display area
+        // Create and configure the display area + testing
         displayArea = new JTextArea();
         displayArea.setEditable(false);
+        displayArea.setLineWrap(true);
+        displayArea.setWrapStyleWord(true);
+        displayArea.setPreferredSize(new Dimension(600, 200));
         JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+
 
         // Add the main panel and display area to the frame
         add(mainPanel, BorderLayout.NORTH);
@@ -103,10 +105,6 @@ public class HotelView extends JFrame {
         }
     }
 
-    public String getSearchQuery() {
-        return searchField.getText();
-    }
-
     public void setDisplayText(String text) {
         displayArea.setText(text);
     }
@@ -139,10 +137,4 @@ public class HotelView extends JFrame {
         modifyDatePriceButton.addActionListener(listener);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            HotelView hv = new HotelView();
-            hv.setVisible(true);
-        });
-    }
 }
