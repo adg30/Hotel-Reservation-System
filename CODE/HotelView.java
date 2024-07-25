@@ -33,7 +33,7 @@ public class HotelView extends JFrame {
         roomPriceField = new JTextField();
         inputPanel.add(roomPriceField);
 
-        inputPanel.add(new JLabel("Hotel Type (0-Standard, 1-Resort, 2-Suite):"));
+        inputPanel.add(new JLabel("Hotel Type (1-Standard, 2 - Divided):"));//TODO:make this more descriptive
         hotelTypeField = new JTextField();
         inputPanel.add(hotelTypeField);
 
@@ -44,7 +44,6 @@ public class HotelView extends JFrame {
         manageButton = new JButton("Manage Hotel");
         viewButton = new JButton("View Hotels");
         bookButton = new JButton("Book Room");
-        searchButton = new JButton("Search Hotel");
         exitButton = new JButton("Exit");
 
         // Add buttons to the button panel

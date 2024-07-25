@@ -102,12 +102,12 @@ public class ManageButtonListener extends BaseButtonListener {
               return;
           }
 
-          String[] roomTypes = {"(1)Standard Room", "(2)Deluxe Room", "(3)Executive Room"};
+          String[] roomTypes = {"(0)Standard Room", "(1)Deluxe Room", "(2)Executive Room"};
           int roomType = JOptionPane.showOptionDialog(view, "Select room type:", "Room Type",
                   JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, roomTypes, roomTypes[0]);
 
           if (roomType >= 0 && roomType < 3) {//TODO:ADD CONFIRMATION MESSAGE FOR ADDING ROOM, AND CHECKING THAT THE ROOMID IS UNIQUE
-              hotel.addRoom(roomID, roomType);
+              hotel.addRoom(roomID, roomType + 1);//+1 since room types are 1,2,3
               view.setDisplayText("Room added successfully.");
           } else {
               view.setDisplayText("Invalid room type.");
@@ -149,7 +149,7 @@ public class ManageButtonListener extends BaseButtonListener {
             int choice = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove room " + roomID + "?", "Confirm Remove",
                     JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                hotel.getRooms().remove(roomID);
+                hotel.getRooms().remove(roomID);//ignore squiggly since id == room name
                 view.setDisplayText("Room removed successfully.");
             } else {
                 view.setDisplayText("Modification discarded.");
@@ -159,12 +159,32 @@ public class ManageButtonListener extends BaseButtonListener {
   }
 
   private void updateBasePrice(Hotel hotel) {
+    double price = 0;
+    boolean hasReservations = false;
+    for (Room room : hotel.getRooms()) {//maybe turn this into a seperate method?
+        if (!room.getReservations().isEmpty()) {
+            hasReservations = true;
+            break;
+        }
+    }
+    if (hasReservations) {
+        view.setDisplayText("There are still reservations in the hotel, please remove them first.");
+        return;
+    }
+
     String priceStr = JOptionPane.showInputDialog(view, "Enter new base price:");
     try {
-        double price = Double.parseDouble(priceStr);
-        if (price > 0) {
-            String result = hotel.updatePrice(price);
-            view.setDisplayText(result);
+        price = Double.parseDouble(priceStr);
+        if (price > 100) {
+            int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to change the price to " + price + "?", "Confirm Price Change", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                String result = hotel.updatePrice(price);
+                view.setDisplayText(result);
+            } else {
+                view.setDisplayText("Modification Discarded.");
+            }
+        } else if(price < 100) {
+            view.setDisplayText("Input must be greater than or equal to 100. Base price not updated.");
         } else {
             view.setDisplayText("Invalid input. Base price not updated.");
         }
@@ -178,8 +198,14 @@ public class ManageButtonListener extends BaseButtonListener {
     try {
         int roomName = Integer.parseInt(roomNameStr);
         String guestName = JOptionPane.showInputDialog(view, "Enter guest name:");
-        String result = hotel.removeReservation(roomName, guestName);
-        view.setDisplayText(result);
+        int choice = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove this reservation?", "Confirm Remove", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            String result = hotel.removeReservation(roomName, guestName);
+            view.setDisplayText(result);
+        } else {
+            view.setDisplayText("Modification discarded.");
+        }
+
     } catch (NumberFormatException e) {
         view.setDisplayText("Invalid input. Reservation not removed.");
     }
@@ -198,7 +224,7 @@ public class ManageButtonListener extends BaseButtonListener {
 
   public void DatePriceModify(Hotel hotel) {
     // Prompt the user for the date to modify
-    String dateStr = JOptionPane.showInputDialog(view, "Which date would you like to modify (1-31):");
+    String dateStr = JOptionPane.showInputDialog(view, "Which date would you like to modify (1-31):");//string so that later on we can maybe display a calendar and if they type like july x it only takes x
     int date;
     try {
         date = Integer.parseInt(dateStr);

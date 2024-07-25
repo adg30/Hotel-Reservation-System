@@ -35,7 +35,7 @@ public class BookButtonListener extends BaseButtonListener {
         if (mechanismChoice == 1) {
             // Automated mechanism
             view.setDisplayText("Automated mechanism selected...");
-            availableRoom = selectAutomatically(checkin, checkout, roomType);
+            availableRoom = selectAutomatically(hotel, checkin, checkout, roomType);
     
             if (availableRoom != null) {
                 view.setDisplayText("Booked room " + availableRoom.getID() + " successfully!");
@@ -46,7 +46,7 @@ public class BookButtonListener extends BaseButtonListener {
         } else if (mechanismChoice == 2) {
             // Manual mechanism
             view.setDisplayText("Manual mechanism selected...");
-            availableRoom = selectManually(checkin, checkout, roomType);
+            availableRoom = selectManually(hotel, checkin, checkout, roomType);
     
             if (availableRoom != null) {
                 view.setDisplayText("Selected room " + availableRoom.getID() + " successfully!");
@@ -64,7 +64,7 @@ public class BookButtonListener extends BaseButtonListener {
                 percentage += hotel.getDatePrice().get(checkin - 1);
                 checkin++;
             }
-            //TODO:error checking for char
+            
             char discountChoice = getCharInput("Do you have a discount code? (Y/N):");
     
             if (discountChoice == 'Y' || discountChoice == 'y') {
@@ -80,78 +80,37 @@ public class BookButtonListener extends BaseButtonListener {
         }
       }
     
-      private Room selectAutomatically(int checkin, int checkout, int type) {
-          for (Hotel hotel : hotels) {
+      public Room selectAutomatically(Hotel hotel, int checkin, int checkout, int type) {
               for (Room room : hotel.getRooms()) {
                   if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
                       return room;
                   }
               }
-          }
+          
           return null;
       }
     
-      private Room selectManually(int checkin, int checkout, int type) {//TODO:go over this
+      public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {//TODO:go over this
           StringBuilder availableRoomsStr = new StringBuilder("Available rooms:\n");
-          int roomCount = 0;
+          ArrayList<Room> availableRooms = new ArrayList<Room>();
     
-          for (Hotel hotel : hotels) {
-              for (Room room : hotel.getRooms()) {
-                  if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
-                      roomCount++;
-                      availableRoomsStr.append(roomCount).append(". Room ").append(room.getID()).append("\n");
-                  }
-              }
-          }
-    
-          if (roomCount > 0) {
-              int roomChoice = getIntInput(availableRoomsStr.toString() + "Select a room (number on the left side):", 1, roomCount);
-              return hotels.get(0).getRooms().get(roomChoice - 1); // Simplified for the example, should map correctly to chosen room
-          } else {
-              return null;
-          }
-      }
-    
-      private int getIntInput(String message, int min, int max) {
-          int input = 0;
-          do {
-              try {
-                  String strInput = JOptionPane.showInputDialog(message);
-                  input = Integer.parseInt(strInput);
-              } catch (NumberFormatException e) {
-                  view.setDisplayText("Invalid input. Please enter a number.");
-              }
-          } while (input < min || input > max);
-          return input;
-      }
-    
-      private char getCharInput(String message) {
-          char input;
-          String strInput;
-          do {
-              strInput = JOptionPane.showInputDialog(message);
-              if (strInput == null || strInput.length() != 1) {
-                  view.setDisplayText("Invalid input. Please enter a single character.");
-                  input = 0;
-              } else {
-                  input = strInput.charAt(0);
-              }
-          } while (input == 0);
-          return input;
-      }
-    
-      private double getDoubleInput(String message, double min, double max) {
-        double input = 0;
-        do {
-            try {
-                String strInput = JOptionPane.showInputDialog(message);
-                input = Double.parseDouble(strInput);
-            } catch (NumberFormatException e) {
-                view.setDisplayText("Invalid input. Please enter a valid percentage.");
+          for (Room room : hotel.getRooms()) {
+            if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
+                availableRooms.add(room);
+                availableRoomsStr.append(availableRooms.size()).append(". Room ").append(room.getID()).append("\n");
             }
-        } while (input < min || input > max);
-        return input;
+        }
+    
+          if (!availableRooms.isEmpty()) {
+            int roomChoice = getIntInput(availableRoomsStr.toString() + "Select a room (number on the left side):", 1, availableRooms.size());
+            return availableRooms.get(roomChoice-1);
+          } else {
+            view.setDisplayText("No rooms available for the selected dates.");
+            return null;
+          }
       }
+    
+      
     
       private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int firstdate) {
           double price;
@@ -178,6 +137,7 @@ public class BookButtonListener extends BaseButtonListener {
                   }
                   break;
               default:
+                  view.setDisplayText("Invalid discount code detected. Default price will be applied with no discounts");
                   price = room.getPrice() * percentage;
                   break;
           }
