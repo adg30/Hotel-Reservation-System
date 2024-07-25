@@ -101,7 +101,6 @@ public class HotelView extends JFrame {
         displayArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(displayArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(400, 300));
 
         JOptionPane.showMessageDialog(this, scrollPane, "Display", JOptionPane.INFORMATION_MESSAGE);
     }
