@@ -13,7 +13,7 @@ public class CreateButtonListener extends BaseButtonListener {
       double price = view.getRoomPrice();
       int type = view.getHotelType();
 
-      for (Hotel hotel : hotels) {
+      for (Hotel hotel : hotels) {//TODO:overhaul this with the logic for the buttons
         if (hotel.getName().equals(name)) {
             isUniqueName = false;
             break;

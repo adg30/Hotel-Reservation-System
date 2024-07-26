@@ -1,11 +1,13 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 public class HotelView extends JFrame {
+    private JCheckBox customPriceCheckbox;
+    private JRadioButton standardHotel, dividedHotel;
     private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField;
-    private JButton createButton, manageButton, viewButton, bookButton, searchButton, exitButton;
-    private JTextArea displayArea;
+    private JButton createButton, manageButton, viewButton, bookButton, exitButton;
 
     public HotelView() {
         setTitle("Hotel Management System");
@@ -29,13 +31,31 @@ public class HotelView extends JFrame {
         numRoomsField = new JTextField();
         inputPanel.add(numRoomsField);
 
-        inputPanel.add(new JLabel("Room Price:"));
-        roomPriceField = new JTextField();
-        inputPanel.add(roomPriceField);
+        inputPanel.add(new JLabel("Custom Price:"));
+        customPriceCheckbox = new JCheckBox();
+        inputPanel.add(customPriceCheckbox);
 
-        inputPanel.add(new JLabel("Hotel Type (1-Standard, 2 - Divided):"));//TODO:make this more descriptive
-        hotelTypeField = new JTextField();
-        inputPanel.add(hotelTypeField);
+        customPriceCheckbox.addActionListener(new ActionListener() {//checkbox popup experimenting
+            public void actionPerformed(ActionEvent e) {
+                if (customPriceCheckbox.isSelected()) {
+                    String customPrice = JOptionPane.showInputDialog("Enter custom price:");
+                    if (customPrice != null) {
+                        customPriceCheckbox.setText(customPrice);
+                    }
+                }
+            }
+        });
+
+        //experimenting with radiobuttons
+        inputPanel.add(new JLabel("Hotel Type:"));
+        ButtonGroup hotelTypeButtonGroup = new ButtonGroup();
+        standardHotel = new JRadioButton("Standard");
+        dividedHotel = new JRadioButton("Divided");
+        hotelTypeButtonGroup.add(standardHotel);
+        hotelTypeButtonGroup.add(dividedHotel);
+        inputPanel.add(standardHotel);
+        inputPanel.add(dividedHotel);
+
 
         // Create a button panel with GridLayout
         JPanel buttonPanel = new JPanel(new GridLayout(4, 2, 10, 10)); // 4 rows, 2 columns, 10px padding
@@ -51,7 +71,6 @@ public class HotelView extends JFrame {
         buttonPanel.add(manageButton);
         buttonPanel.add(viewButton);
         buttonPanel.add(bookButton);
-        buttonPanel.add(searchButton);
         buttonPanel.add(exitButton);
 
         // Add input and button panels to the main panel
@@ -118,10 +137,6 @@ public class HotelView extends JFrame {
 
     public void addBookButtonListener(ActionListener listener) {
         bookButton.addActionListener(listener);
-    }
-
-    public void addSearchButtonListener(ActionListener listener) {
-        searchButton.addActionListener(listener);
     }
 
     public void addExitButtonListener(ActionListener listener) {
