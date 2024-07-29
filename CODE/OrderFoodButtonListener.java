@@ -13,6 +13,8 @@ public class OrderFoodButtonListener extends BaseButtonListener{
         Hotel selectedHotel = selectHotel(hotels, view, "Order Food", "Select a hotel:");
         if (selectedHotel != null) {
             orderFood(selectedHotel);
+        } else {
+            view.setDisplayText("Invalid Hotel.");
         }
     }
 

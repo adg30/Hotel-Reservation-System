@@ -44,7 +44,13 @@ public class ViewButtonListener extends BaseButtonListener {
             case 1:
                 String roomIdInput = JOptionPane.showInputDialog(view, "Enter room ID:");
                 int roomID = Integer.parseInt(roomIdInput);
-                Room selectedRoom = hotel.getRooms().stream().filter(room -> room.getID() == roomID).findFirst().orElse(null);
+                Room selectedRoom = null;
+                for (Room room : hotel.getRooms()) {
+                    if (room.getID() == roomID) {
+                        selectedRoom = room;
+                        break;
+                    }
+                }
                 if (selectedRoom == null) {
                     view.setDisplayText("Room not found.");
                 } else {
@@ -54,7 +60,13 @@ public class ViewButtonListener extends BaseButtonListener {
                 }
                 break;
             case 2:
-                boolean hasReservations = hotel.getRooms().stream().anyMatch(room -> !room.getReservations().isEmpty());
+                boolean hasReservations = false;
+                for (Room room : hotel.getRooms()) {
+                    if (!room.getReservations().isEmpty()) {
+                        hasReservations = true;
+                        break;
+                    }
+                }
                 if (!hasReservations) {
                     view.setDisplayText("No reservations found.");
                     return;

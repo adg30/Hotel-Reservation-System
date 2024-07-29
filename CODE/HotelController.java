@@ -23,6 +23,7 @@ public class HotelController {
     this.view.addViewButtonListener(new ViewButtonListener(hotels, view));
     this.view.addBookButtonListener(new BookButtonListener(hotels, view));
     this.view.addExitButtonListener(new ExitButtonListener(hotels, view));
+    this.view.addOrderFoodButtonListener(new OrderFoodButtonListener(hotels, view));
 
   }
 

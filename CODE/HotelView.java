@@ -85,6 +85,8 @@ public class HotelView extends JFrame {
             }
         });
 
+        
+
 
         // Create a button panel with GridLayout
         JPanel buttonPanel = new JPanel(new GridLayout(4, 2, 10, 10)); // 4 rows, 2 columns, 10px padding
