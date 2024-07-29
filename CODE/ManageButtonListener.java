@@ -136,9 +136,9 @@ public class ManageButtonListener extends BaseButtonListener {
         return;
     }
 
-    Object[] roomIDs = removable.toArray();//TODO: go over why it did this
+    Object[] roomIDs = removable.toArray();//turn the removable arraylist into an array of objects so it can be used by joptionpane
     Integer roomID = (Integer) JOptionPane.showInputDialog(view, "Select a room to remove:", "Remove Room",
-            JOptionPane.QUESTION_MESSAGE, null, roomIDs, roomIDs[0]);
+            JOptionPane.QUESTION_MESSAGE, null, roomIDs, roomIDs[0]);//takes the option then wraps it as an integer
 
     if (roomID != null) {
         int roomIndex = hotel.searchRoom(roomID);
@@ -149,14 +149,23 @@ public class ManageButtonListener extends BaseButtonListener {
             int choice = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove room " + roomID + "?", "Confirm Remove",
                     JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                hotel.getRooms().remove(roomID);//ignore squiggly since id == room name
+                hotel.getRooms().remove(roomIndex);//DO NOT IGNORE SQUIGGLY PAST ME WHYYYYYYYYYYYYYYYYYYYYYY
                 view.setDisplayText("Room removed successfully.");
+
+                removable.clear();
+                for (Room room : hotel.getRooms()) {
+                    if (room.getReservations().isEmpty()) {
+                        removable.add(room.getID());
+                    }
+                }
             } else {
                 view.setDisplayText("Modification discarded.");
             }
         }
     }
   }
+
+  
 
   private void updateBasePrice(Hotel hotel) {
     double price = 0;

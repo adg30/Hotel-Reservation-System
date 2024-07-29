@@ -79,72 +79,72 @@ public class BookButtonListener extends BaseButtonListener {
             availableRoom.addTotalPrice(price);
         }
       }
-    
-      public Room selectAutomatically(Hotel hotel, int checkin, int checkout, int type) {
-              for (Room room : hotel.getRooms()) {
-                  if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
-                      return room;
-                  }
-              }
-          
-          return null;
-      }
-    
-      public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {//TODO:go over this
-          StringBuilder availableRoomsStr = new StringBuilder("Available rooms:\n");
-          ArrayList<Room> availableRooms = new ArrayList<Room>();
-    
-          for (Room room : hotel.getRooms()) {
-            if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
-                availableRooms.add(room);
-                availableRoomsStr.append(availableRooms.size()).append(". Room ").append(room.getID()).append("\n");
-            }
-        }
-    
-          if (!availableRooms.isEmpty()) {
-            int roomChoice = getIntInput(availableRoomsStr.toString() + "Select a room (number on the left side):", 1, availableRooms.size());
-            return availableRooms.get(roomChoice-1);
-          } else {
-            view.setDisplayText("No rooms available for the selected dates.");
-            return null;
-          }
-      }
-    
-      
-    
-      private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int firstdate) {
-          double price;
-          switch (code) {
-              case "I_WORK_HERE":
-                  price = room.getPrice() * percentage * 0.9;
-                  view.setDisplayText("Applying 10% discount...");
-                  break;
-              case "STAY4_GET1":
-                  if (numNights > 4) {
-                      price = room.getPrice() * (percentage - hotel.getDatePrice().get(firstdate - 1));
-                      view.setDisplayText("Removing price for first day...");
-                  } else {
-                      price = room.getPrice() * percentage;
-                  }
-                  break;
-              case "PAYDAY":
-                  if (room.getAvailability(15) || room.getAvailability(30)) {
-                      price = room.getPrice() * percentage * 0.93;
-                      view.setDisplayText("Applying 6% discount...");
-                  } else {
-                      view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
-                      price = room.getPrice() * percentage;
-                  }
-                  break;
-              default:
-                  view.setDisplayText("Invalid discount code detected. Default price will be applied with no discounts");
-                  price = room.getPrice() * percentage;
-                  break;
-          }
-          return price;
-      }
 
-  }
+    public Room selectAutomatically(Hotel hotel, int checkin, int checkout, int type) {
+            for (Room room : hotel.getRooms()) {
+                if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
+                    return room;
+                }
+            }
+        
+        return null;
+    }
+
+    public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {//TODO:go over this
+        StringBuilder availableRoomsStr = new StringBuilder("Available rooms:\n");
+        ArrayList<Room> availableRooms = new ArrayList<Room>();
+
+        for (Room room : hotel.getRooms()) {
+        if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
+            availableRooms.add(room);
+            availableRoomsStr.append(availableRooms.size()).append(". Room ").append(room.getID()).append("\n");
+        }
+    }
+
+        if (!availableRooms.isEmpty()) {
+        int roomChoice = getIntInput(availableRoomsStr.toString() + "Select a room (number on the left side):", 1, availableRooms.size());
+        return availableRooms.get(roomChoice-1);
+        } else {
+        view.setDisplayText("No rooms available for the selected dates.");
+        return null;
+        }
+    }
+
+    
+
+    private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int firstdate) {
+        double price;
+        switch (code) {
+            case "I_WORK_HERE":
+                price = room.getPrice() * percentage * 0.9;
+                view.setDisplayText("Applying 10% discount...");
+                break;
+            case "STAY4_GET1":
+                if (numNights > 4) {
+                    price = room.getPrice() * (percentage - hotel.getDatePrice().get(firstdate - 1));
+                    view.setDisplayText("Removing price for first day...");
+                } else {
+                    price = room.getPrice() * percentage;
+                }
+                break;
+            case "PAYDAY":
+                if (room.getAvailability(15) || room.getAvailability(30)) {
+                    price = room.getPrice() * percentage * 0.93;
+                    view.setDisplayText("Applying 6% discount...");
+                } else {
+                    view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
+                    price = room.getPrice() * percentage;
+                }
+                break;
+            default:
+                view.setDisplayText("Invalid discount code detected. Default price will be applied with no discounts");
+                price = room.getPrice() * percentage;
+                break;
+        }
+        return price;
+    }
+
+}
 
 
 
