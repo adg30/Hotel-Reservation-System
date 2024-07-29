@@ -18,7 +18,11 @@ public abstract class BaseButtonListener implements ActionListener {
             return null;
         }
 
-        String[] hotelNames = hotels.stream().map(Hotel::getName).toArray(String[]::new);
+        String[] hotelNames = new String[hotels.size()];//make an array of hotel names
+        for (int i = 0; i < hotels.size(); i++) {
+            hotelNames[i] = hotels.get(i).getName();
+        }
+
         String selectedHotelName = (String) JOptionPane.showInputDialog(view, message,
                 title, JOptionPane.PLAIN_MESSAGE, null, hotelNames, hotelNames[0]);
 
@@ -27,7 +31,14 @@ public abstract class BaseButtonListener implements ActionListener {
             return null;
         }
 
-        Hotel selectedHotel = hotels.stream().filter(hotel -> hotel.getName().equals(selectedHotelName)).findFirst().orElse(null);
+        Hotel selectedHotel = null;
+        for (Hotel hotel : hotels) {
+            if (hotel.getName().equals(selectedHotelName)) {
+                selectedHotel = hotel;
+                break;
+            }
+        }
+
         if (selectedHotel == null) {
             view.setDisplayText("Hotel not found.");
             return null;

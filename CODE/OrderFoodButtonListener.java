@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 
@@ -18,15 +20,36 @@ public class OrderFoodButtonListener extends BaseButtonListener{
         }
     }
 
-    private void orderFood(Hotel hotel) {
-        //TODO:make it display all the guest names
-        String guestName = JOptionPane.showInputDialog(view, "Enter guest name:");
-        int roomIndex = hotel.findRoomIndexByGuest(guestName);
+    private void orderFood(Hotel hotel) {//changed into a dropdown thingy
+        ArrayList<String> guestNames = new ArrayList<>();
+        for (Room room : hotel.getRooms()) {
+            for (Reservation reservation : room.getReservations()) {
+                guestNames.add(reservation.getGuestName());
+            }
+        }
 
-        if (roomIndex == -1) {
+        if (guestNames.isEmpty()) {
+            view.setDisplayText("No guests found.");
+            return;
+        }
+
+        // Use JComboBox for guest selection
+        JComboBox<String> guestComboBox = new JComboBox<>(guestNames.toArray(new String[0]));
+        int result = JOptionPane.showConfirmDialog(view, guestComboBox, "Select Guest", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result != JOptionPane.OK_OPTION) {
+            view.setDisplayText("No guest selected.");
+            return;
+        }
+
+        String selectedGuest = (String) guestComboBox.getSelectedItem();
+        int roomIndex = hotel.findRoomIndexByGuest(selectedGuest);
+
+        if (roomIndex == -1) {//should i remove this?
             view.setDisplayText("Guest not found.");
             return;
         }
+
 
 
         String[] foodOptions = {
