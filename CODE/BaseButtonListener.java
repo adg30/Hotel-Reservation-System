@@ -45,6 +45,9 @@ public abstract class BaseButtonListener implements ActionListener {
             } catch (NumberFormatException e) {
                 view.setDisplayText("Invalid input. Please enter a number.");
             }
+
+            if (input < min || input > max)
+            view.setDisplayText("Invalid input. please enter within the range given");
         } while (input < min || input > max);
         return input;
     }
@@ -67,12 +70,14 @@ public abstract class BaseButtonListener implements ActionListener {
     public double getDoubleInput(String message, double min, double max) {
       double input = 0;
       do {
-          try {
-              String strInput = JOptionPane.showInputDialog(message);
-              input = Double.parseDouble(strInput);
-          } catch (NumberFormatException e) {
-              view.setDisplayText("Invalid input. Please enter a valid percentage.");
-          }
+        try {
+            String strInput = JOptionPane.showInputDialog(message);
+            input = Double.parseDouble(strInput);
+        } catch (NumberFormatException e) {
+            view.setDisplayText("Invalid input. Please enter a valid percentage.");
+        }
+        if (input < min || input > max)
+        view.setDisplayText("Invalid input. please enter within the range given");
       } while (input < min || input > max);
       return input;
     }

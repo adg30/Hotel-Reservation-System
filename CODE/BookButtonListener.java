@@ -23,9 +23,9 @@ public class BookButtonListener extends BaseButtonListener {
         double percentage = 0;
         int firstdate = 0;
     
-        checkin = getIntInput("Enter Check-in date (1-30):", 1, 31);
-        checkout = getIntInput("Enter Check-out date:", checkin + 1, 31);
-    
+        checkin = getIntInput("Enter Check-in date (1-30):", 1, 30);
+        checkout = getIntInput("Enter Check-out date(" + (checkin+1) + "-30):", checkin + 1, 31);
+
         int mechanismChoice = getIntInput("Select room selection mechanism:\n(1.) Automated\n(2.) Manual\nYour Choice:", 1, 2);
     
         int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);
