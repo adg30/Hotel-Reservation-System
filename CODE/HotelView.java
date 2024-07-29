@@ -7,7 +7,8 @@ public class HotelView extends JFrame {
     private JCheckBox customPriceCheckbox;
     private JRadioButton standardHotel, dividedHotel;
     private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField;
-    private JButton createButton, manageButton, viewButton, bookButton, exitButton;
+    private JButton createButton, manageButton, viewButton, bookButton, exitButton, orderFoodButton;
+    private int selectedHotelType;
 
     public HotelView() {
         setTitle("Hotel Management System");
@@ -35,19 +36,35 @@ public class HotelView extends JFrame {
         customPriceCheckbox = new JCheckBox();
         inputPanel.add(customPriceCheckbox);
 
-        customPriceCheckbox.addActionListener(new ActionListener() {//checkbox popup experimenting
+
+        customPriceCheckbox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (customPriceCheckbox.isSelected()) {
                     String customPrice = JOptionPane.showInputDialog("Enter custom price:");
                     if (customPrice != null) {
-                        customPriceCheckbox.setText(customPrice);
+                        try {
+                            int price = Integer.parseInt(customPrice);
+                            if (price >= 100) {
+                                customPriceCheckbox.setText(customPrice);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Invalid price! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                                customPriceCheckbox.setText("100");
+                            }
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(null, "Invalid input! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                            customPriceCheckbox.setText("100");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid input! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                        customPriceCheckbox.setText("100");
                     }
                 }
             }
         });
 
+
         //experimenting with radiobuttons
-        inputPanel.add(new JLabel("Hotel Type:"));
+        inputPanel.add(new JLabel("Hotel Type:"));//make this work
         ButtonGroup hotelTypeButtonGroup = new ButtonGroup();
         standardHotel = new JRadioButton("Standard");
         dividedHotel = new JRadioButton("Divided");
@@ -55,6 +72,18 @@ public class HotelView extends JFrame {
         hotelTypeButtonGroup.add(dividedHotel);
         inputPanel.add(standardHotel);
         inputPanel.add(dividedHotel);
+
+        standardHotel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                selectedHotelType = 1;//turn it into 1 for standard 2 for divided
+            }
+        });
+
+        dividedHotel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                selectedHotelType = 2;
+            }
+        });
 
 
         // Create a button panel with GridLayout
@@ -64,6 +93,7 @@ public class HotelView extends JFrame {
         manageButton = new JButton("Manage Hotel");
         viewButton = new JButton("View Hotels");
         bookButton = new JButton("Book Room");
+        orderFoodButton = new JButton("Order Food");
         exitButton = new JButton("Exit");
 
         // Add buttons to the button panel
@@ -71,6 +101,7 @@ public class HotelView extends JFrame {
         buttonPanel.add(manageButton);
         buttonPanel.add(viewButton);
         buttonPanel.add(bookButton);
+        buttonPanel.add(orderFoodButton);
         buttonPanel.add(exitButton);
 
         // Add input and button panels to the main panel
@@ -104,13 +135,22 @@ public class HotelView extends JFrame {
         }
     }
 
-    public int getHotelType() {
+    public int getSelectedHotelType() {
+        return selectedHotelType;
+    }
+
+    public boolean isCustomPriceSelected() {
+        return customPriceCheckbox.isSelected();
+    }
+    
+    public double getCustomPrice() {
         try {
-            return Integer.parseInt(hotelTypeField.getText());
+            return Double.parseDouble(customPriceCheckbox.getText());
         } catch (NumberFormatException e) {
-            return -1;
+            return 1299; // Return default price if parsing fails
         }
     }
+
 
     public void setDisplayText(String text) {
         JTextArea displayArea = new JTextArea(text);
@@ -137,6 +177,10 @@ public class HotelView extends JFrame {
 
     public void addBookButtonListener(ActionListener listener) {
         bookButton.addActionListener(listener);
+    }
+
+    public void addOrderFoodButtonListener(ActionListener listener) {
+        orderFoodButton.addActionListener(listener);
     }
 
     public void addExitButtonListener(ActionListener listener) {

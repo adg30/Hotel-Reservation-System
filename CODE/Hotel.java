@@ -205,67 +205,82 @@ public class Hotel {
     return this.DatePrice;
   }
 
+  
+
   public void addPrice(double price, int index){
     rooms.get(index).addTotalPrice(price);
   }
-  public void orderFood(){
-    System.out.println("Guest:");
-    //displays guests
-    for(int i = 0; i < rooms.size(); i++)
-    {
-      if(!rooms.get(i).getReservations().isEmpty()){
-        for(int j = 0; j < rooms.get(i).getReservations().size(); j++)
-          System.out.println(rooms.get(i).getReservations().get(j));
-      }
-    }
-    System.out.print("Which guest would like to order a food: ");
-    Scanner scan = new Scanner();
-    String guest = scan.nextLine();
-    //starts algo
-    for(int i = 0; i < rooms.size(); i++)
-    {
-      int guestIndex = searchGuest(i, guest);
-      if(guestIndex != -1)
-      {
-        System.out.println("1. Toccino with Rice: 299.0");
-        System.out.println("2. Longganisa with Rice: 320.0");
-        System.out.println("3. Bacon with eggs: 340.0");
-        System.out.println("4. Iced Coffee: 120.0");
-        System.out.println("5. Beef Tapa with Egg and Rice: 390.0");
-        int choice = scan.nextInt();
-        scan.nextLine();
-        while(choice < 1 || choice > 5)
-        {
-          System.out.print("Invalid choice please input from 1-5: ");
-          choice = scan.nextInt();
-          scan.nextLine();
+
+  public int findRoomIndexByGuest(String guestName) {
+    for (int i = 0; i < rooms.size(); i++) {
+        for (Reservation reservation : rooms.get(i).getReservations()) {
+            if (reservation.getGuestName().equals(guestName)) {
+                return i;
+            }
         }
-        switch(choice) //adds the price to the room where the guest stays
-        {
-          case 1:
-            System.out.println("Toccino with Rice has been ordered.");
-            addPrice(299.0, i);
-            break;
-          case 2:
-            System.out.println("Longganisa with Rice has been ordered.");
-            addPrice(320.0, i);
-            break;
-          case 3:
-            System.out.println("Bacon with eggs has been ordered.");
-            addPrice(340.0, i);
-            break;
-          case 4:
-            System.out.println("Iced Coffee has been ordered.");
-            addPrice(120.0, i);
-            break;
-          case 5:
-            System.out.println("Beef Tapa with Egg and Rice has been ordered.");
-            addPrice(390.0, i);
-            break;
-        }
-      }
     }
-    //if goes through all rooms and guest isn't found(meaning its an invalid input
-    System.out.println("Guest name " + guest + " was not found.");
-  }
+    return -1;
+}
+
+
+  // public void orderFood(){
+  //   System.out.println("Guest:");
+  //   //displays guests
+  //   for(int i = 0; i < rooms.size(); i++)
+  //   {
+  //     if(!rooms.get(i).getReservations().isEmpty()){
+  //       for(int j = 0; j < rooms.get(i).getReservations().size(); j++)
+  //         System.out.println(rooms.get(i).getReservations().get(j));
+  //     }
+  //   }
+  //   System.out.print("Which guest would like to order a food: ");
+  //   Scanner scan = new Scanner();
+  //   String guest = scan.nextLine();
+  //   //starts algo
+  //   for(int i = 0; i < rooms.size(); i++)
+  //   {
+  //     int guestIndex = searchGuest(i, guest);
+  //     if(guestIndex != -1)
+  //     {
+  //       System.out.println("1. Toccino with Rice: 299.0");
+  //       System.out.println("2. Longganisa with Rice: 320.0");
+  //       System.out.println("3. Bacon with eggs: 340.0");
+  //       System.out.println("4. Iced Coffee: 120.0");
+  //       System.out.println("5. Beef Tapa with Egg and Rice: 390.0");
+  //       int choice = scan.nextInt();
+  //       scan.nextLine();
+  //       while(choice < 1 || choice > 5)
+  //       {
+  //         System.out.print("Invalid choice please input from 1-5: ");
+  //         choice = scan.nextInt();
+  //         scan.nextLine();
+  //       }
+  //       switch(choice) //adds the price to the room where the guest stays
+  //       {
+  //         case 1:
+  //           System.out.println("Toccino with Rice has been ordered.");
+  //           addPrice(299.0, i);
+  //           break;
+  //         case 2:
+  //           System.out.println("Longganisa with Rice has been ordered.");
+  //           addPrice(320.0, i);
+  //           break;
+  //         case 3:
+  //           System.out.println("Bacon with eggs has been ordered.");
+  //           addPrice(340.0, i);
+  //           break;
+  //         case 4:
+  //           System.out.println("Iced Coffee has been ordered.");
+  //           addPrice(120.0, i);
+  //           break;
+  //         case 5:
+  //           System.out.println("Beef Tapa with Egg and Rice has been ordered.");
+  //           addPrice(390.0, i);
+  //           break;
+  //       }
+  //     }
+  //   }
+  //   //if goes through all rooms and guest isn't found(meaning its an invalid input
+  //   System.out.println("Guest name " + guest + " was not found.");
+  // }
 }
