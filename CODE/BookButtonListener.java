@@ -15,7 +15,7 @@ public class BookButtonListener extends BaseButtonListener {
         }
     }
 
-    public void simulateBooking(Hotel hotel) {
+    public void simulateBooking(Hotel hotel) {//TODO:make this an if statement to check if hotel type is standard or not
         int checkin = 0;
         int checkout = 0;
         double price;
@@ -28,7 +28,7 @@ public class BookButtonListener extends BaseButtonListener {
 
         int mechanismChoice = getIntInput("Select room selection mechanism:\n(1.) Automated\n(2.) Manual\nYour Choice:", 1, 2);
     
-        int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);
+        int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);//should be only for divided hotels
     
         Room availableRoom = null;
     
@@ -60,16 +60,16 @@ public class BookButtonListener extends BaseButtonListener {
             numNights = checkout - checkin;
             firstdate = checkin;
     
-            while (checkin < checkout) {
+            while (firstdate < checkout) {
                 percentage += hotel.getDatePrice().get(checkin - 1);
-                checkin++;
+                firstdate++;
             }
             
             char discountChoice = getCharInput("Do you have a discount code? (Y/N):");
     
             if (discountChoice == 'Y' || discountChoice == 'y') {
                 String code = JOptionPane.showInputDialog("Enter discount code:");
-                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, firstdate);
+                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, checkin);
             } else {//TODO: make it say an error message, dont just give them the normal prce
                 price = percentage * availableRoom.getPrice();
             }
