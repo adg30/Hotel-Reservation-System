@@ -55,7 +55,7 @@ public class ManageButtonListener extends BaseButtonListener {
             removeHotel(hotel);
             break;
         case 6:
-            DatePriceModify(hotel);
+            datePriceModify(hotel);
             break;
         case 7:
             // Back to Menu
@@ -231,9 +231,9 @@ public class ManageButtonListener extends BaseButtonListener {
       }
   }
 
-  public void DatePriceModify(Hotel hotel) {
+  public void datePriceModify(Hotel hotel) {
     // Prompt the user for the date to modify
-    String dateStr = JOptionPane.showInputDialog(view, "Which date would you like to modify (1-31):");//string so that later on we can maybe display a calendar and if they type like july x it only takes x
+    String dateStr = JOptionPane.showInputDialog(view, "Which date would you like to modify (1-31):");
     int date;
     try {
         date = Integer.parseInt(dateStr);

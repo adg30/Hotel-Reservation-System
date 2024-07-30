@@ -21,7 +21,6 @@ public class BookButtonListener extends BaseButtonListener {
         double price;
         int numNights = 0;
         double percentage = 0;
-        int firstdate = 0;
     
         checkin = getIntInput("Enter Check-in date (1-30):", 1, 30);
         checkout = getIntInput("Enter Check-out date(" + (checkin+1) + "-30):", checkin + 1, 31);
@@ -54,23 +53,23 @@ public class BookButtonListener extends BaseButtonListener {
                 view.setDisplayText("No rooms available for the selected dates.");
             }
         }
-    
+
         if (availableRoom != null) {
             String guestName = JOptionPane.showInputDialog("Enter guest name:");
             numNights = checkout - checkin;
-            firstdate = checkin;
+
     
-            while (firstdate < checkout) {
-                percentage += hotel.getDatePrice().get(checkin - 1);
-                firstdate++;
+            for (int i = checkin; i < checkout; i++) {//changed so no need for firstdate
+                percentage += hotel.getDatePrice().get(i - 1);//get the dateprices for all days in between
             }
             
             char discountChoice = getCharInput("Do you have a discount code? (Y/N):");
     
             if (discountChoice == 'Y' || discountChoice == 'y') {
-                String code = JOptionPane.showInputDialog("Enter discount code:");
-                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, checkin);
-            } else {//TODO: make it say an error message, dont just give them the normal prce
+                String code = JOptionPane.showInputDialog("Enter discount code(CASE SENSITIVE):");
+                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, checkin, checkout);
+            } else {
+                view.setDisplayText("Invalid choice. proceeding with normal pricing.");
                 price = percentage * availableRoom.getPrice();
             }
     
@@ -112,7 +111,7 @@ public class BookButtonListener extends BaseButtonListener {
 
     
 
-    private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int firstdate) {
+    private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int checkin, int checkout) {
         double price;
         switch (code) {
             case "I_WORK_HERE":
@@ -121,16 +120,16 @@ public class BookButtonListener extends BaseButtonListener {
                 break;
             case "STAY4_GET1":
                 if (numNights > 4) {
-                    price = room.getPrice() * (percentage - hotel.getDatePrice().get(firstdate - 1));
+                    price = room.getPrice() * (percentage - hotel.getDatePrice().get(checkin - 1));
                     view.setDisplayText("Removing price for first day...");
                 } else {
                     price = room.getPrice() * percentage;
                 }
                 break;
-            case "PAYDAY":
-                if (room.getAvailability(15) || room.getAvailability(30)) {
+            case "PAYDAY"://check if within range instead of just checking availability
+                if ((checkin <= 15 && checkout > 15) || (checkin <= 30 && checkout > 30)) {
                     price = room.getPrice() * percentage * 0.93;
-                    view.setDisplayText("Applying 6% discount...");
+                    view.setDisplayText("Applying 7% discount...");
                 } else {
                     view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
                     price = room.getPrice() * percentage;
