@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class temp {
+public class Main {
    
   public static void main(String[] args) {
     // Create the model
@@ -11,7 +11,6 @@ public class temp {
 
     // Create the controller
     HotelController controller = new HotelController(hotels, view);
-
     // Set the view visible
     view.setVisible(true);
   }

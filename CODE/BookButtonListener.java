@@ -15,20 +15,20 @@ public class BookButtonListener extends BaseButtonListener {
         }
     }
 
-    public void simulateBooking(Hotel hotel) {//TODO:make this an if statement to check if hotel type is standard or not
+    public void simulateBooking(Hotel hotel) {//TODO:implement breakdown display as shown in the specs,like a receipt
         int checkin = 0;
         int checkout = 0;
         double price;
         int numNights = 0;
         double percentage = 0;
-        int firstdate = 0;
+        StringBuilder breakdown = new StringBuilder("Breakdown:\n");
     
         checkin = getIntInput("Enter Check-in date (1-30):", 1, 30);
         checkout = getIntInput("Enter Check-out date(" + (checkin+1) + "-30):", checkin + 1, 31);
 
         int mechanismChoice = getIntInput("Select room selection mechanism:\n(1.) Automated\n(2.) Manual\nYour Choice:", 1, 2);
     
-        int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);//should be only for divided hotels
+        int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);//TODO:make this check if there are executive/deluxe rooms available
     
         Room availableRoom = null;
     
@@ -54,28 +54,32 @@ public class BookButtonListener extends BaseButtonListener {
                 view.setDisplayText("No rooms available for the selected dates.");
             }
         }
-    
+
         if (availableRoom != null) {
             String guestName = JOptionPane.showInputDialog("Enter guest name:");
             numNights = checkout - checkin;
-            firstdate = checkin;
+
     
-            while (firstdate < checkout) {
-                percentage += hotel.getDatePrice().get(checkin - 1);
-                firstdate++;
+            for (int i = checkin; i < checkout; i++) {//changed so no need for firstdate
+                percentage += hotel.getDatePrice().get(i - 1);//get the dateprices for all days in between
+                breakdown.append(i).append("th day -> ").append(hotel.getDatePrice().get(i - 1) * 100).append("%\n");
             }
             
             char discountChoice = getCharInput("Do you have a discount code? (Y/N):");
     
             if (discountChoice == 'Y' || discountChoice == 'y') {
-                String code = JOptionPane.showInputDialog("Enter discount code:");
-                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, checkin);
-            } else {//TODO: make it say an error message, dont just give them the normal prce
+                String code = JOptionPane.showInputDialog("Enter discount code(CASE SENSITIVE):");
+                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, checkin, checkout);
+            } else if (discountChoice == 'N' || discountChoice == 'n'){
+                view.setDisplayText("Proceeding with normal pricing...");
+                price = percentage * availableRoom.getPrice();
+            } else {
+                view.setDisplayText("Invalid choice. Proceeding with normal pricing.");
                 price = percentage * availableRoom.getPrice();
             }
     
             availableRoom.addReservation(guestName, checkin, checkout);
-            view.setDisplayText("Booking successful for guest " + guestName + " in room " + availableRoom.getID() + "\nTotal price after booking " + numNights + " nights: $" + price);
+            view.setDisplayText("Booking successful for guest " + guestName + " in room " + availableRoom.getID() + "\n" + breakdown.toString() + "\nTotal price after booking " + numNights + " nights: $" + price);
             availableRoom.addTotalPrice(price);
         }
       }
@@ -102,44 +106,58 @@ public class BookButtonListener extends BaseButtonListener {
     }
 
         if (!availableRooms.isEmpty()) {
-        int roomChoice = getIntInput(availableRoomsStr.toString() + "Select a room (number on the left side):", 1, availableRooms.size());
-        return availableRooms.get(roomChoice-1);
+            int roomChoice = getIntInput(availableRoomsStr.toString() + "Select a room (number on the left side):", 1, availableRooms.size());
+            return availableRooms.get(roomChoice-1);
         } else {
-        view.setDisplayText("No rooms available for the selected dates.");
-        return null;
+            view.setDisplayText("No rooms available for the selected dates.");
+            return null;
         }
     }
 
     
 
-    private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int firstdate) {
-        double price;
-        switch (code) {
-            case "I_WORK_HERE":
-                price = room.getPrice() * percentage * 0.9;
-                view.setDisplayText("Applying 10% discount...");
-                break;
-            case "STAY4_GET1":
-                if (numNights > 4) {
-                    price = room.getPrice() * (percentage - hotel.getDatePrice().get(firstdate - 1));
-                    view.setDisplayText("Removing price for first day...");
-                } else {
-                    price = room.getPrice() * percentage;
-                }
-                break;
-            case "PAYDAY":
-                if (room.getAvailability(15) || room.getAvailability(30)) {
-                    price = room.getPrice() * percentage * 0.93;
-                    view.setDisplayText("Applying 6% discount...");
-                } else {
-                    view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
-                    price = room.getPrice() * percentage;
-                }
-                break;
-            default:
-                view.setDisplayText("Invalid discount code detected. Default price will be applied with no discounts");
-                price = room.getPrice() * percentage;
-                break;
+    private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int checkin, int checkout) {
+        double price = 0;
+        boolean validCode = false;
+        
+        while (!validCode) {
+            switch (code) {
+                case "I_WORK_HERE":
+                    price = room.getPrice() * percentage * 0.9;
+                    view.setDisplayText("Applying 10% discount...");
+                    validCode = true;
+                    break;
+                case "STAY4_GET1":
+                    if (numNights > 4) {
+                        price = room.getPrice() * (percentage - hotel.getDatePrice().get(checkin - 1));
+                        view.setDisplayText("Removing price for first day...");
+                    } else {
+                        price = room.getPrice() * percentage;
+                    }
+                    validCode = true;
+                    break;
+                case "PAYDAY":
+                    // Check if within range instead of just checking availability
+                    if ((checkin <= 15 && checkout > 15) || (checkin <= 30 && checkout > 30)) {
+                        price = room.getPrice() * percentage * 0.93;
+                        view.setDisplayText("Applying 7% discount...");
+                        validCode = true;
+                    } else {
+                        view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
+                        price = room.getPrice() * percentage;
+                        validCode = true;
+                    }
+                    break;
+                default:
+                    // Prompt user to re-enter the code if the discount code is invalid
+                    code = JOptionPane.showInputDialog("Invalid discount code. Please enter a valid discount code (CASE SENSITIVE):");
+                    if (code == null || code.isEmpty()) {
+                        view.setDisplayText("Default price will be applied with no discounts.");
+                        price = room.getPrice() * percentage;
+                        validCode = true;
+                    }
+                    break;
+            }
         }
         return price;
     }

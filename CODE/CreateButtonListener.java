@@ -35,6 +35,11 @@ public class CreateButtonListener extends BaseButtonListener {
             return;
         }
 
+        if (numRooms > 50) {
+            view.setDisplayText("Invalid input. Max amount of rooms is 50.");
+            return;
+        }
+
         if ( type < 1 || type > 2){
           view.setDisplayText("User must select a hotel type.");
           return;

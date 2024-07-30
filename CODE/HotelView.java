@@ -6,7 +6,7 @@ import javax.swing.*;
 public class HotelView extends JFrame {
     private JCheckBox customPriceCheckbox;
     private JRadioButton standardHotel, dividedHotel;
-    private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField;
+    private JTextField hotelNameField, numRoomsField, roomPriceField;
     private JButton createButton, manageButton, viewButton, bookButton, exitButton, orderFoodButton;
     private int selectedHotelType;
 
@@ -64,7 +64,7 @@ public class HotelView extends JFrame {
 
 
         //experimenting with radiobuttons
-        inputPanel.add(new JLabel("Hotel Type:"));//make this work
+        inputPanel.add(new JLabel("Base Hotel Type:"));//make this work
         ButtonGroup hotelTypeButtonGroup = new ButtonGroup();
         standardHotel = new JRadioButton("Standard");
         dividedHotel = new JRadioButton("Divided");
@@ -94,7 +94,7 @@ public class HotelView extends JFrame {
         createButton = new JButton("Create Hotel");
         manageButton = new JButton("Manage Hotel");
         viewButton = new JButton("View Hotels");
-        bookButton = new JButton("Book Room");
+        bookButton = new JButton("Simulate Booking");
         orderFoodButton = new JButton("Order Food");
         exitButton = new JButton("Exit");
 
