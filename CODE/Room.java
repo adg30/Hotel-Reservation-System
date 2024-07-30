@@ -10,7 +10,7 @@ public class Room {
     /** 
     *The price of this room
     */
-    private double price;
+    private double basePrice;
     private double totalPrice;
     /** 
     *An array containing the availability of this room
@@ -27,12 +27,12 @@ public class Room {
     * Constructs a room with the specified ID and price
     *
     * @param ID    the ID of the room
-    * @param price the price of the room
+    * @param price the base price of the room
     **/
     public Room(int ID, double price, int type){
         int i;
         this.ID = ID;
-        this.price = price;
+        this.basePrice = price;
         this.totalPrice = 0;
         this.type = type;
         this.availability = new boolean[31];
@@ -62,7 +62,7 @@ public class Room {
     * @return the price of the room
     **/
     public double getPrice(){
-        return price;
+        return basePrice;
     }
     /**
     * Gets the list of reservations for the room.
@@ -97,7 +97,7 @@ public class Room {
     * @param price the new price of the room
     **/
     public void setPrice(double price){ 
-        this.price = price;
+        this.basePrice = price;
     }
  
     /**
@@ -136,9 +136,9 @@ public class Room {
         }
     }
 
-    public void addTotalPrice(double price)
+    public void addTotalPrice(double addedPrice)
     {
-        this.totalPrice += price;
+        this.totalPrice += addedPrice;
     }
     public double getTotalPrice()
     {

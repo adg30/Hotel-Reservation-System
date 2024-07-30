@@ -34,16 +34,6 @@ public class Reservation {
     }
 
     /**
-     * Calculates the total price for the reservation based on the room price and the number of days.
-     *
-     * @return the total price of the reservation
-     */
-    public double calculatePrice() {
-        int stayDuration = checkout - checkin;
-        return stayDuration * room.getPrice(); // Ensure getRate() does not return null
-    }
-
-    /**
      * Gets the name of the guest who made the reservation.
      *
      * @return the name of the guest
@@ -67,14 +57,7 @@ public class Reservation {
     public int getCheckout(){
         return checkout;
     }
-    /**
-     * Gets the total price using calculate price.
-     *
-     * @return the total price of the reservation
-     */
-    public double getTotalPrice(){
-        return calculatePrice();
-    }
+
     /**
      * Gets the room associated with the reservation.
      *

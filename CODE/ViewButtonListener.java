@@ -88,7 +88,7 @@ public class ViewButtonListener extends BaseButtonListener {
                                     .append("\nCheck-in: ").append(reservation.getCheckin())
                                     .append("\nCheck-out: ").append(reservation.getCheckout())
                                     .append("\nPrice per day: ").append(room.getPrice())
-                                    .append("\nTotal price: ").append(reservation.getTotalPrice()).append("\n");
+                                    .append("\nTotal price: ").append(getTotalPrice(hotel, reservation, room)).append("\n");
                             reservationFound = true;
                         }
                     }
@@ -104,4 +104,17 @@ public class ViewButtonListener extends BaseButtonListener {
         }
     }
   }
+
+  /**
+     * Calculates the total price for the reservation based on the room price and the number of days.
+     *
+     * @return the total price of the reservation
+     */
+    public double getTotalPrice(Hotel hotel, Reservation reservation, Room room) {
+        double totalPrice = 0;
+        for (int i = reservation.getCheckin(); i < reservation.getCheckout(); i++) {
+            totalPrice += room.getPrice() * hotel.getDatePrice().get(i - 1);
+        }
+        return totalPrice;
+    }
 }
