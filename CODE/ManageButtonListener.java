@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 
 public class ManageButtonListener extends BaseButtonListener {
-    public ManageButtonListener(ArrayList<Hotel> hotels, HotelView view){
+    public ManageButtonListener(ArrayList<Hotel> hotels, HotelView view){//TODO: for all, rather than just closing if the user inputs something invalid, just ask for it again
         super(hotels,view);
     }
     
@@ -221,7 +221,7 @@ public class ManageButtonListener extends BaseButtonListener {
   }
 
 
-  private void removeHotel(Hotel hotel) {
+  private void removeHotel(Hotel hotel) {//TODO:add checking for reservations
       int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotel.getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
       if (confirm == JOptionPane.YES_OPTION) {
           hotels.remove(hotel);
