@@ -6,7 +6,7 @@ import javax.swing.*;
 public class HotelView extends JFrame {
     private JCheckBox customPriceCheckbox;
     private JRadioButton standardHotel, dividedHotel;
-    private JTextField hotelNameField, numRoomsField, roomPriceField, hotelTypeField;
+    private JTextField hotelNameField, numRoomsField, roomPriceField;
     private JButton createButton, manageButton, viewButton, bookButton, exitButton, orderFoodButton;
     private int selectedHotelType;
 
