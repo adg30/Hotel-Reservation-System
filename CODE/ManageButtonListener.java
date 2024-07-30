@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 
 public class ManageButtonListener extends BaseButtonListener {
-    public ManageButtonListener(ArrayList<Hotel> hotels, HotelView view){//TODO: for all, rather than just closing if the user inputs something invalid, just ask for it again
+    public ManageButtonListener(ArrayList<Hotel> hotels, HotelView view){
         super(hotels,view);
     }
     
@@ -94,31 +94,45 @@ public class ManageButtonListener extends BaseButtonListener {
           return;
       }
 
+
       String roomIDStr = JOptionPane.showInputDialog(view, "Enter new room ID (100-199):");
       try {
-          int roomID = Integer.parseInt(roomIDStr);
-          if (roomID < 100 || roomID > 199) {
-              view.setDisplayText("Please enter an ID fit to our standard (100, 101, 102 ... 199).");
-              return;
-          }
+        int roomID = Integer.parseInt(roomIDStr);
+        if (roomID < 100 || roomID > 199) {
+            view.setDisplayText("Please enter an ID fit to our standard (100, 101, 102 ... 199).");
+            return;
+        }
+        
+        for (Room room : hotel.getRooms()) {
+        if (room.getID() == roomID) {
+            view.setDisplayText("Room ID must be unique. Try again.");
+            return;
+        }
+    }
 
-          String[] roomTypes = {"(0)Standard Room", "(1)Deluxe Room", "(2)Executive Room"};
-          int roomType = JOptionPane.showOptionDialog(view, "Select room type:", "Room Type",
-                  JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, roomTypes, roomTypes[0]);
 
-          if (roomType >= 0 && roomType < 3) {//TODO:ADD CONFIRMATION MESSAGE FOR ADDING ROOM, AND CHECKING THAT THE ROOMID IS UNIQUE
-              hotel.addRoom(roomID, roomType + 1);//+1 since room types are 1,2,3
-              view.setDisplayText("Room added successfully.");
-          } else {
-              view.setDisplayText("Invalid room type.");
-          }
+        String[] roomTypes = {"(1)Standard Room", "(2)Deluxe Room", "(3)Executive Room"};
+        int roomType = JOptionPane.showOptionDialog(view, "Select room type:", "Room Type",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, roomTypes, roomTypes[0]);
 
-      } catch (NumberFormatException e) {
-          view.setDisplayText("Invalid room ID.");
-      }
+        if (roomType >= 0 && roomType < 3) {
+            int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to add room " + roomID + " as " + roomTypes[roomType] + "?", "Confirm Add Room", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                hotel.addRoom(roomID, roomType + 1);
+                view.setDisplayText("Room added successfully.");
+            } else {
+                view.setDisplayText("Room addition cancelled.");
+            }
+        } else {
+            view.setDisplayText("Invalid room type.");
+        }
+
+    } catch (NumberFormatException e) {
+        view.setDisplayText("Invalid room ID.");
+    }
   }
 
-  private void removeRooms(Hotel hotel) {//TODO:SEPERATE INTO MVC STUFF
+  private void removeRooms(Hotel hotel) {
     if (hotel.getRooms().size() <= 1) {
         view.setDisplayText("There are no rooms left to remove. Please add more rooms before removing.");
         return;
@@ -146,10 +160,10 @@ public class ManageButtonListener extends BaseButtonListener {
         if (!hotel.getRooms().get(roomIndex).getReservations().isEmpty()) {
             view.setDisplayText("Room selected has active reservations, please remove them first.");
         } else {
-            int choice = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove room " + roomID + "?", "Confirm Remove",
-                    JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove room " + roomID + "?", 
+            "Confirm Remove", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                hotel.getRooms().remove(roomIndex);//DO NOT IGNORE SQUIGGLY PAST ME WHYYYYYYYYYYYYYYYYYYYYYY
+                hotel.getRooms().remove(roomIndex);
                 view.setDisplayText("Room removed successfully.");
 
                 removable.clear();
@@ -170,7 +184,8 @@ public class ManageButtonListener extends BaseButtonListener {
   private void updateBasePrice(Hotel hotel) {
     double price = 0;
     boolean hasReservations = false;
-    for (Room room : hotel.getRooms()) {//maybe turn this into a seperate method?
+    String priceStr;
+    for (Room room : hotel.getRooms()) {
         if (!room.getReservations().isEmpty()) {
             hasReservations = true;
             break;
@@ -181,24 +196,26 @@ public class ManageButtonListener extends BaseButtonListener {
         return;
     }
 
-    String priceStr = JOptionPane.showInputDialog(view, "Enter new base price:");
-    try {
-        price = Double.parseDouble(priceStr);
-        if (price > 100) {
-            int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to change the price to " + price + "?", "Confirm Price Change", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                String result = hotel.updatePrice(price);
-                view.setDisplayText(result);
-            } else {
-                view.setDisplayText("Modification Discarded.");
-            }
-        } else if(price < 100) {
-            view.setDisplayText("Input must be greater than or equal to 100. Base price not updated.");
-        } else {
+    boolean validInput = false;
+    while(!validInput){
+        priceStr = JOptionPane.showInputDialog(view, "Enter new base price:");
+        try {
+            price = Double.parseDouble(priceStr);
+            if (price > 100) {
+                int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to change the price to " + price + "?", "Confirm Price Change", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    String result = hotel.updatePrice(price);
+                    view.setDisplayText(result);
+                    validInput = true;
+                } else {
+                    view.setDisplayText("Modification Discarded.");
+                    validInput = true;
+                }
+            } else view.setDisplayText("Input must be greater than or equal to 100. Base price not updated.");
+
+        } catch (NumberFormatException e) {
             view.setDisplayText("Invalid input. Base price not updated.");
         }
-    } catch (NumberFormatException e) {
-        view.setDisplayText("Invalid input. Base price not updated.");
     }
   }
 
@@ -221,14 +238,27 @@ public class ManageButtonListener extends BaseButtonListener {
   }
 
 
-  private void removeHotel(Hotel hotel) {//TODO:add checking for reservations
-      int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotel.getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
-      if (confirm == JOptionPane.YES_OPTION) {
-          hotels.remove(hotel);
-          view.setDisplayText("Hotel removed successfully.");
-      } else {
-          view.setDisplayText("Hotel removal cancelled.");
-      }
+  private void removeHotel(Hotel hotel) {
+    boolean hasReservations = false;
+    for (Room room : hotel.getRooms()) {
+        if (!room.getReservations().isEmpty()) {
+            hasReservations = true;
+            break;
+        }
+    }
+
+    if (hasReservations) {
+        view.setDisplayText("There are still reservations in the hotel, please remove them first.");
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotel.getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        hotels.remove(hotel);
+        view.setDisplayText("Hotel removed successfully.");
+    } else {
+        view.setDisplayText("Hotel removal cancelled.");
+    }
   }
 
   public void datePriceModify(Hotel hotel) {

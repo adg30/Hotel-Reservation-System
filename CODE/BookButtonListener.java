@@ -116,37 +116,51 @@ public class BookButtonListener extends BaseButtonListener {
 
     
 
-private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int checkin, int checkout) {
-    double price;
-    switch (code) {
-        case "I_WORK_HERE":
-            price = room.getPrice() * percentage * 0.9;
-            view.setDisplayText("Applying 10% discount...");
-            break;
-        case "STAY4_GET1":
-            if (numNights > 4) {
-                price = room.getPrice() * (percentage - hotel.getDatePrice().get(checkin - 1));
-                view.setDisplayText("Removing price for first day...");
-            } else {
-                price = room.getPrice() * percentage;
+    private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int checkin, int checkout) {
+        double price = 0;
+        boolean validCode = false;
+        
+        while (!validCode) {
+            switch (code) {
+                case "I_WORK_HERE":
+                    price = room.getPrice() * percentage * 0.9;
+                    view.setDisplayText("Applying 10% discount...");
+                    validCode = true;
+                    break;
+                case "STAY4_GET1":
+                    if (numNights > 4) {
+                        price = room.getPrice() * (percentage - hotel.getDatePrice().get(checkin - 1));
+                        view.setDisplayText("Removing price for first day...");
+                    } else {
+                        price = room.getPrice() * percentage;
+                    }
+                    validCode = true;
+                    break;
+                case "PAYDAY":
+                    // Check if within range instead of just checking availability
+                    if ((checkin <= 15 && checkout > 15) || (checkin <= 30 && checkout > 30)) {
+                        price = room.getPrice() * percentage * 0.93;
+                        view.setDisplayText("Applying 7% discount...");
+                        validCode = true;
+                    } else {
+                        view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
+                        price = room.getPrice() * percentage;
+                        validCode = true;
+                    }
+                    break;
+                default:
+                    // Prompt user to re-enter the code if the discount code is invalid
+                    code = JOptionPane.showInputDialog("Invalid discount code. Please enter a valid discount code (CASE SENSITIVE):");
+                    if (code == null || code.isEmpty()) {
+                        view.setDisplayText("Default price will be applied with no discounts.");
+                        price = room.getPrice() * percentage;
+                        validCode = true;
+                    }
+                    break;
             }
-            break;
-        case "PAYDAY"://check if within range instead of just checking availability
-            if ((checkin <= 15 && checkout > 15) || (checkin <= 30 && checkout > 30)) {
-                price = room.getPrice() * percentage * 0.93;
-                view.setDisplayText("Applying 7% discount...");
-            } else {
-                view.setDisplayText("Day 15 or 30 should be included as a check-in time. Default price will be applied with no discounts.");
-                price = room.getPrice() * percentage;
-            }
-            break;
-        default://TODO: maybe make this ask for them to type the code again instead of just using default price
-            view.setDisplayText("Invalid discount code detected. Default price will be applied with no discounts");
-            price = room.getPrice() * percentage;
-            break;
+        }
+        return price;
     }
-    return price;
-}
 
 }
 
