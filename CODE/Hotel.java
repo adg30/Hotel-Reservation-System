@@ -157,32 +157,28 @@ public class Hotel {
    * Method for searching up a specific guest in the hotel using their name and
    * room index.
    *
-   * @param roomIndex the index of the room to search index
+   * @param room the room to search index
    * @param key       for searching index of guest name in a room
    * @return the index of the guest if found, -1 if not found
    */
-  public int searchGuest(int roomIndex, String key)// this checks if the guest is in the hotel, key is their name
+  public int searchGuest(Room room, String key)// this checks if the guest is in the hotel, key is their name
   {
     int i;
-    for (i = 0; i < rooms.get(roomIndex).getReservations().size(); i++) {
-      if (key.equals(rooms.get(roomIndex).getReservations().get(i).getGuestName()))
+    for (i = 0; i < room.getReservations().size(); i++) {
+      if (key.equals(room.getReservations().get(i).getGuestName()))
         return i;
     }
     return -1;
   }
 
-  public String removeReservation(int roomName, String guestName) {
-    int roomIndex = searchRoom(roomName);
-    if (roomIndex == -1) {
-        return "Invalid room name.";
-    }
+  public String removeReservation(Room room, String guestName) {
 
-    int reservationIndex = searchGuest(roomIndex, guestName);
+    int reservationIndex = searchGuest(room, guestName);
     if (reservationIndex == -1) {
         return "Invalid guest name.";
     }
 
-    rooms.get(roomIndex).getReservations().remove(reservationIndex);
+    room.getReservations().remove(reservationIndex);
     return "Reservation removed successfully.";
 }
 

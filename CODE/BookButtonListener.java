@@ -122,7 +122,15 @@ public class BookButtonListener extends BaseButtonListener {
         
         return null;
     }
-    
+    /**
+     * Manually selects an available room based on the specified criteria.
+     * 
+     * @param hotel    The hotel instance.
+     * @param checkin  The check-in date.
+     * @param checkout The check-out date.
+     * @param roomType The room type.
+     * @return The selected Room instance or null if no room is available.
+     */
     public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {
         StringBuilder availableRoomsStr = new StringBuilder("Available rooms:\n");
         ArrayList<Room> availableRooms = new ArrayList<Room>();
@@ -144,7 +152,18 @@ public class BookButtonListener extends BaseButtonListener {
     }
 
     
-
+    /**
+     * Applies a discount to the booking based on the provided discount code.
+     * 
+     * @param hotel    The hotel instance.
+     * @param code     The discount code.
+     * @param room     The selected room.
+     * @param percentage The total percentage of date prices.
+     * @param numNights The number of nights for the booking.
+     * @param checkin  The check-in date.
+     * @param checkout The check-out date.
+     * @return The total price after applying the discount.
+     */
     private double applyDiscount(Hotel hotel, String code, Room room, double percentage, int numNights, int checkin, int checkout) {
         double price = 0;
         boolean validCode = false;

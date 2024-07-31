@@ -1,13 +1,27 @@
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-
+/**
+ * Listener for managing hotel-related actions.
+ */
 public class ManageButtonListener extends BaseButtonListener {
+    /**
+     * Constructor for ManageButtonListener.
+     * 
+     * @param hotels the list of hotels.
+     * @param view the view associated with the hotel.
+     */
     public ManageButtonListener(ArrayList<Hotel> hotels, HotelView view){
         super(hotels,view);
     }
-    
+    /**
+     * Handles the action event for the manage button.
+     * 
+     * @param e the action event.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Hotel selectedHotel = selectHotel(hotels, view, "Manage Hotel", "Select a hotel to manage:");
@@ -18,7 +32,11 @@ public class ManageButtonListener extends BaseButtonListener {
     }
 
   
-
+    /**
+     * Manages the selected hotel.
+     * 
+     * @param hotel the hotel to manage.
+     */
     public void manageHotel(Hotel hotel) {
 
     String[] options = {
@@ -36,7 +54,12 @@ public class ManageButtonListener extends BaseButtonListener {
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     showChoices(choice, hotel);
     }
-
+    /**
+     * Displays choices based on the user's selection.
+     * 
+     * @param choice the user's choice.
+     * @param hotel the hotel being managed.
+     */
     public void showChoices(int choice, Hotel hotel){
         switch (choice) {
             case 0:
@@ -68,13 +91,22 @@ public class ManageButtonListener extends BaseButtonListener {
                 break;
         }
     }
-
+    /**
+     * Changes the name of the hotel.
+     * 
+     * @param hotel the hotel to change the name.
+     */
     private void changeHotelName(Hotel hotel) {
         String newName = validateName(hotel);
         hotel.setName(newName);
         view.setDisplayText("Hotel name changed to " + newName + " successfully.");
     }
-
+    /**
+     * Validates and returns a unique name for the hotel.
+     * 
+     * @param hotel the hotel to validate the name.
+     * @return the new validated name.
+     */
     private String validateName(Hotel hotel){
         boolean isUniqueName = false;
         String newName = "";
@@ -95,17 +127,22 @@ public class ManageButtonListener extends BaseButtonListener {
         }
         return newName;
     }
+    /**
+     * Adds rooms to the hotel.
+     * 
+     * @param hotel the hotel to add rooms to.
+     */
+    private void addRooms(Hotel hotel) {
 
-  private void addRooms(Hotel hotel) {
-      if (hotel.getRooms().size() >= 50) {
+        if (hotel.getRooms().size() >= 50) {
           view.setDisplayText("Maximum number of rooms reached. Remove a room to continue.");
           return;
-      }
+        }
 
-      int roomID = promptForRoomID();
-      if (roomID == -1) return;
+        int roomID = promptForRoomID();
+        if (roomID == -1) return;
 
-      if (!isRoomIDUnique(hotel, roomID)) {
+        if (!isRoomIDUnique(hotel, roomID)) {
         view.setDisplayText("Room ID must be unique. Try again.");
         return;
     }
@@ -127,20 +164,33 @@ public class ManageButtonListener extends BaseButtonListener {
             view.setDisplayText("Invalid room type.");
         }
     }
-
+    /**
+     * Returns the string representation of the room type.
+     * 
+     * @param roomType the room type.
+     * @return the string representation of the room type.
+     */
     private String getRoomTypeString(int roomType) {
         String[] roomTypes = {"Standard Room", "Deluxe Room", "Executive Room"};
         return roomTypes[roomType];
     }
   
-
+    /**
+     * Prompts the user to select a room type.
+     * 
+     * @return the selected room type.
+     */
     private int promptForRoomType(){
         String[] roomTypes = {"Standard Room", "Deluxe Room", "Executive Room"};
         return JOptionPane.showOptionDialog(view, "Select room type:", "Room Type",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, roomTypes, roomTypes[0]);
 
     }
-
+    /**
+     * Prompts the user to enter a room ID.
+     * 
+     * @return the entered room ID.
+     */
     private int promptForRoomID() {
         String roomIDStr = JOptionPane.showInputDialog(view, "Enter new room ID (100-199):");
         try {
@@ -155,6 +205,13 @@ public class ManageButtonListener extends BaseButtonListener {
             return -1;
         }
     }
+    /**
+     * Checks if the room ID is unique within the hotel.
+     * 
+     * @param hotel the hotel.
+     * @param roomID the room ID to check.
+     * @return true if the room ID is unique, false otherwise.
+     */
     private boolean isRoomIDUnique(Hotel hotel, int roomID) {
     for (Room room : hotel.getRooms()) {
         if (room.getID() == roomID) {
@@ -164,7 +221,11 @@ public class ManageButtonListener extends BaseButtonListener {
     return true;
 }
 
-
+     /**
+     * Removes rooms from the hotel.
+     * 
+     * @param hotel the hotel to remove rooms from.
+     */
     private void removeRooms(Hotel hotel) {
         if (hotel.getRooms().size() <= 1) {
             view.setDisplayText("There are no rooms left to remove. Please add more rooms before removing.");
@@ -182,7 +243,12 @@ public class ManageButtonListener extends BaseButtonListener {
             removeRoom(hotel, roomID);
         }
     }
-
+     /**
+     * Gets the list of removable room IDs (rooms without reservations).
+     * 
+     * @param hotel the hotel.
+     * @return the list of removable room IDs.
+     */
     private ArrayList<Integer> getRemovableRoomIDs(Hotel hotel) {
         ArrayList<Integer> removable = new ArrayList<>();
         for (Room room : hotel.getRooms()) {
@@ -192,13 +258,23 @@ public class ManageButtonListener extends BaseButtonListener {
         }
         return removable;
     }
-
+    /**
+     * Prompts the user to select a room to remove.
+     * 
+     * @param removable the list of removable room IDs.
+     * @return the selected room ID.
+     */
     private Integer promptForRoomSelection(ArrayList<Integer> removable) {
         Object[] roomIDs = removable.toArray();
         return (Integer) JOptionPane.showInputDialog(view, "Select a room to remove:", "Remove Room",
                 JOptionPane.QUESTION_MESSAGE, null, roomIDs, roomIDs[0]);
     }
-
+     /**
+     * Removes a room from the hotel.
+     * 
+     * @param hotel the hotel.
+     * @param roomID the room ID to remove.
+     */
     private void removeRoom(Hotel hotel, int roomID) {
         int roomIndex = hotel.searchRoom(roomID);
         Room room = hotel.getRooms().get(roomIndex);
@@ -216,16 +292,15 @@ public class ManageButtonListener extends BaseButtonListener {
         }
     }
 
-    private boolean confirmAction(String message) {
-        int confirm = JOptionPane.showConfirmDialog(view, message, "Confirm", JOptionPane.YES_NO_OPTION);
-        return confirm == JOptionPane.YES_OPTION;
-    }
-
   
-
-  private void updateBasePrice(Hotel hotel) {
+     /**
+     * Updates the base price of rooms in the hotel.
+     * 
+     * @param hotel the hotel.
+     */
+    private void updateBasePrice(Hotel hotel) {
         checkReservations(hotel);
-        double newPrice = promptForPrice("Enter new base price:", 100);
+        double newPrice = promptForBasePrice("Enter new base price:", 100);
         if (newPrice >= 100 && confirmAction("Are you sure you want to change the price to " + newPrice + "?")) {
             String result = hotel.updatePrice(newPrice);
             view.setDisplayText(result);
@@ -233,8 +308,13 @@ public class ManageButtonListener extends BaseButtonListener {
             view.setDisplayText("Modification discarded.");
         }
     }
-
-    private double promptForPrice(String message, double minValue) {
+    /**
+     * Prompts the user to enter a new base price for a room type.
+     * 
+     * @param roomType the room type.
+     * @return the entered base price.
+     */
+    private double promptForBasePrice(String message, double minValue) {
         while (true) {
             String priceStr = JOptionPane.showInputDialog(view, message);
             try {
@@ -246,21 +326,67 @@ public class ManageButtonListener extends BaseButtonListener {
             }
         }
     }
+    /**
+ * Removes a reservation from the hotel.
+ *
+ * @param hotel the hotel.
+ */
+private void removeReservation(Hotel hotel) {
+    ArrayList<Reservation> allReservations = gatherAllReservations(hotel);
 
-    private void removeReservation(Hotel hotel) {
-        try {
-            int roomID = Integer.parseInt(JOptionPane.showInputDialog(view, "Enter room ID:"));
-            String guestName = JOptionPane.showInputDialog(view, "Enter guest name:");
-            if (confirmAction("Are you sure you want to remove this reservation?")) {
-                String result = hotel.removeReservation(roomID, guestName);
-                view.setDisplayText(result);
-            } else {
-                view.setDisplayText("Modification discarded.");
-            }
-        } catch (NumberFormatException e) {
-            view.setDisplayText("Invalid input. Reservation not removed.");
-        }
+    if (allReservations.isEmpty()) {
+        view.setDisplayText("No reservations to remove.");
+        return;
     }
+
+    String[] reservationDescriptions = generateReservationDescriptions(allReservations);
+
+    JComboBox<String> comboBox = new JComboBox<>(reservationDescriptions);
+    int selection = JOptionPane.showConfirmDialog(view, comboBox, "Select a reservation to remove", JOptionPane.OK_CANCEL_OPTION);
+
+    if (selection == JOptionPane.OK_OPTION) {
+        int selectedIndex = comboBox.getSelectedIndex();
+        Reservation selectedReservation = allReservations.get(selectedIndex);
+
+        if (confirmAction("Are you sure you want to remove this reservation?")) {
+            String result = hotel.removeReservation(selectedReservation.getRoom(), selectedReservation.getGuestName());
+            view.setDisplayText(result);
+        } else {
+            view.setDisplayText("Modification discarded.");
+        }
+    } else {
+        view.setDisplayText("Reservation removal cancelled.");
+    }
+}
+
+/**
+ * Gathers all reservations from the hotel.
+ *
+ * @param hotel the hotel.
+ * @return a list of all reservations.
+ */
+private ArrayList<Reservation> gatherAllReservations(Hotel hotel) {
+    ArrayList<Reservation> allReservations = new ArrayList<>();
+    for (Room room : hotel.getRooms()) {
+        allReservations.addAll(room.getReservations());
+    }
+    return allReservations;
+}
+
+/**
+ * Generates descriptions for each reservation for display in the dropdown.
+ *
+ * @param allReservations the list of all reservations.
+ * @return an array of reservation descriptions.
+ */
+private String[] generateReservationDescriptions(ArrayList<Reservation> allReservations) {
+    String[] reservationDescriptions = new String[allReservations.size()];
+    for (int i = 0; i < allReservations.size(); i++) {
+        Reservation res = allReservations.get(i);
+        reservationDescriptions[i] = "Room ID: " + res.getRoom().getID() + ", Guest: " + res.getGuestName();
+    }
+    return reservationDescriptions;
+}
 
 
   private void removeHotel(Hotel hotel) {
@@ -324,4 +450,9 @@ public class ManageButtonListener extends BaseButtonListener {
     }
 
   }
+  
+  private boolean confirmAction(String message) {
+    int confirm = JOptionPane.showConfirmDialog(view, message, "Confirm", JOptionPane.YES_NO_OPTION);
+    return confirm == JOptionPane.YES_OPTION;
+}
 }

@@ -2,10 +2,6 @@
 import java.util.ArrayList;
 /*
 TODO: 
-      1. Low-level info about selected reservation doesn't show correct total price if with discount or modify date price
-      2. Not allowed to change baseprice of rooms while there are reservations for hotel
-      3. same with modifydateprice, not allowed if there are resrvations for the hotel
-      4. ROOMS AND RESERVATION BOTH HAVE A GETPRICE? choose which one should stay
 */
 
 public class HotelController {
