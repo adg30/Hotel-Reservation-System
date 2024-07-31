@@ -105,10 +105,25 @@ public class Room {
      *
      * @param guestName the name of the guest
      * @param checkin   the check-in day (0-30)
-     * @param checkout  the check-out day (0-30)
+     * @param checkout  the check-out day (0-31)
      */
     public void addReservation(String guestName, int checkin, int checkout) {   
         Reservation newReservation = new Reservation(guestName, checkin, checkout, this);
+            reservations.add(newReservation);
+            updateAvailability();
+        }
+
+
+    /**
+     * Adds a reservation for the room with a discount code.
+     *
+     * @param guestName the name of the guest
+     * @param checkin   the check-in day (0-30)
+     * @param checkout  the check-out day (0-31)
+     * @param discountCode the discount code used in the reservation
+     */
+    public void addReservation(String guestName, int checkin, int checkout, String discountCode) {   
+        Reservation newReservation = new Reservation(guestName, checkin, checkout, this, discountCode);
             reservations.add(newReservation);
             updateAvailability();
         }

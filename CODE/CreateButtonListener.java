@@ -8,6 +8,10 @@ public class CreateButtonListener extends BaseButtonListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        createHotel();
+    }
+
+    private void createHotel(){
         String name = view.getHotelName();
         boolean isUniqueName = true;
         int numRooms = view.getNumRooms();
@@ -58,5 +62,6 @@ public class CreateButtonListener extends BaseButtonListener {
             hotels.add(new Hotel(name, numRooms, price, type));
             view.setDisplayText("A Type - " + type + " Hotel named \"" + name + "\" added successfully with " + numRooms + " rooms.\nA price of " + price + " added to each room.");
         }
+
     }
 }

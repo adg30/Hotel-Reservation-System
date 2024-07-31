@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Represents a hotel with multiple rooms.

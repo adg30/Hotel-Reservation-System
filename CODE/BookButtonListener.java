@@ -1,12 +1,25 @@
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
-
+/**
+ * Listener class for the book button that handles hotel booking simulation.
+ */
 public class BookButtonListener extends BaseButtonListener {
+    /**
+     * Constructor to initialize hotels and view.
+     * 
+     * @param hotels The list of hotels.
+     * @param view   The HotelView instance.
+     */
     public BookButtonListener(ArrayList<Hotel> hotels, HotelView view){
         super(hotels,view);
     }
 
+    /**
+     * Handles the action performed when the book button is clicked.
+     * 
+     * @param e The ActionEvent triggered by the button click.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Hotel selectedHotel = selectHotel(hotels, view, "Simulate Hotel Booking", "Select a hotel to simulate:");
@@ -15,7 +28,12 @@ public class BookButtonListener extends BaseButtonListener {
         }
     }
 
-    public void simulateBooking(Hotel hotel) {//TODO:implement breakdown display as shown in the specs,like a receipt
+    /**
+     * Simulates the hotel booking process.
+     * 
+     * @param hotel The selected hotel.
+     */
+    public void simulateBooking(Hotel hotel) {
         int checkin = 0;
         int checkout = 0;
         double price;
@@ -28,7 +46,7 @@ public class BookButtonListener extends BaseButtonListener {
 
         int mechanismChoice = getIntInput("Select room selection mechanism:\n(1.) Automated\n(2.) Manual\nYour Choice:", 1, 2);
     
-        int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);//TODO:make this check if there are executive/deluxe rooms available
+        int roomType = getIntInput("Which tier of room would you like to book? (1-3):\n1. Standard Room\n2. Executive Room\n3. Deluxe Room", 1, 3);
     
         Room availableRoom = null;
     
@@ -59,17 +77,19 @@ public class BookButtonListener extends BaseButtonListener {
             String guestName = JOptionPane.showInputDialog("Enter guest name:");
             numNights = checkout - checkin;
 
-    
-            for (int i = checkin; i < checkout; i++) {//changed so no need for firstdate
+            //calculate total percentage based on date prices
+            for (int i = checkin; i < checkout; i++) {
                 percentage += hotel.getDatePrice().get(i - 1);//get the dateprices for all days in between
                 breakdown.append(i).append("th day -> ").append(hotel.getDatePrice().get(i - 1) * 100).append("%\n");
             }
-            
+
+            //check for discount code
+            String discountCode = "";
             char discountChoice = getCharInput("Do you have a discount code? (Y/N):");
-    
+            
             if (discountChoice == 'Y' || discountChoice == 'y') {
-                String code = JOptionPane.showInputDialog("Enter discount code(CASE SENSITIVE):");
-                price = applyDiscount(hotel, code, availableRoom, percentage, numNights, checkin, checkout);
+                discountCode = JOptionPane.showInputDialog("Enter discount code(CASE SENSITIVE):");
+                price = applyDiscount(hotel, discountCode, availableRoom, percentage, numNights, checkin, checkout);
             } else if (discountChoice == 'N' || discountChoice == 'n'){
                 view.setDisplayText("Proceeding with normal pricing...");
                 price = percentage * availableRoom.getPrice();
@@ -78,12 +98,21 @@ public class BookButtonListener extends BaseButtonListener {
                 price = percentage * availableRoom.getPrice();
             }
     
-            availableRoom.addReservation(guestName, checkin, checkout);
+            availableRoom.addReservation(guestName, checkin, checkout, discountCode);
             view.setDisplayText("Booking successful for guest " + guestName + " in room " + availableRoom.getID() + "\n" + breakdown.toString() + "\nTotal price after booking " + numNights + " nights: $" + price);
             availableRoom.addTotalPrice(price);
         }
       }
 
+    /**
+     * Automatically selects an available room based on the specified criteria.
+     * 
+     * @param hotel    The hotel instance.
+     * @param checkin  The check-in date.
+     * @param checkout The check-out date.
+     * @param roomType The room type.
+     * @return The selected Room instance or null if no room is available.
+     */
     public Room selectAutomatically(Hotel hotel, int checkin, int checkout, int type) {
             for (Room room : hotel.getRooms()) {
                 if (room.getAvailabilityRange(checkin, checkout) && room.getType() == type) {
@@ -93,8 +122,8 @@ public class BookButtonListener extends BaseButtonListener {
         
         return null;
     }
-
-    public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {//TODO:go over this
+    
+    public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {
         StringBuilder availableRoomsStr = new StringBuilder("Available rooms:\n");
         ArrayList<Room> availableRooms = new ArrayList<Room>();
 

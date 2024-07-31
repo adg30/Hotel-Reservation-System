@@ -1,12 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-
-public class OrderFoodButtonListener extends BaseButtonListener{
-     public OrderFoodButtonListener(ArrayList<Hotel> hotels, HotelView view) {
+public class OrderFoodButtonListener extends BaseButtonListener {
+    public OrderFoodButtonListener(ArrayList<Hotel> hotels, HotelView view) {
         super(hotels, view);
     }
 
@@ -20,38 +18,55 @@ public class OrderFoodButtonListener extends BaseButtonListener{
         }
     }
 
-    private void orderFood(Hotel hotel) {//changed into a dropdown thingy
-        ArrayList<String> guestNames = new ArrayList<>();
-        for (Room room : hotel.getRooms()) {
-            for (Reservation reservation : room.getReservations()) {
-                guestNames.add(reservation.getGuestName());
-            }
-        }
+    private void orderFood(Hotel hotel) {
+        ArrayList<String> guestNames = getGuestNames(hotel);
 
         if (guestNames.isEmpty()) {
             view.setDisplayText("No guests found.");
             return;
         }
 
-        // Use JComboBox for guest selection
-        JComboBox<String> guestComboBox = new JComboBox<>(guestNames.toArray(new String[0]));
-        int result = JOptionPane.showConfirmDialog(view, guestComboBox, "Select Guest", JOptionPane.OK_CANCEL_OPTION);
-
-        if (result != JOptionPane.OK_OPTION) {
+        String selectedGuest = promptForGuestSelection(guestNames);
+        if (selectedGuest == null) {
             view.setDisplayText("No guest selected.");
             return;
         }
 
-        String selectedGuest = (String) guestComboBox.getSelectedItem();
         int roomIndex = hotel.findRoomIndexByGuest(selectedGuest);
-
-        if (roomIndex == -1) {//should i remove this?
+        if (roomIndex == -1) {
             view.setDisplayText("Guest not found.");
             return;
         }
 
+        double price = promptForFoodOrder();
+        if (price != -1) {
+            hotel.addPrice(price, roomIndex);
+            view.setDisplayText("Food has been ordered.");
+        }
+    }
 
+    private ArrayList<String> getGuestNames(Hotel hotel) {
+        ArrayList<String> guestNames = new ArrayList<>();
+        for (Room room : hotel.getRooms()) {
+            for (Reservation reservation : room.getReservations()) {
+                guestNames.add(reservation.getGuestName());
+            }
+        }
+        return guestNames;
+    }
 
+    private String promptForGuestSelection(ArrayList<String> guestNames) {
+        JComboBox<String> guestComboBox = new JComboBox<>(guestNames.toArray(new String[0]));
+        int result = JOptionPane.showConfirmDialog(view, guestComboBox, "Select Guest", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result != JOptionPane.OK_OPTION) {
+            return null;
+        }
+
+        return (String) guestComboBox.getSelectedItem();
+    }
+
+    private double promptForFoodOrder() {
         String[] foodOptions = {
             "Toccino with Rice: 299.0",
             "Longganisa with Rice: 320.0",
@@ -63,31 +78,20 @@ public class OrderFoodButtonListener extends BaseButtonListener{
         int choice = JOptionPane.showOptionDialog(view, "Select food to order:", "Food Order",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, foodOptions, foodOptions[0]);
 
-        double price = 0;
         switch (choice) {
             case 0:
-                price = 299.0;
-                break;
+                return 299.0;
             case 1:
-                price = 320.0;
-                break;
+                return 320.0;
             case 2:
-                price = 340.0;
-                break;
+                return 340.0;
             case 3:
-                price = 120.0;
-                break;
+                return 120.0;
             case 4:
-                price = 390.0;
-                break;
+                return 390.0;
             default:
                 view.setDisplayText("Invalid choice.");
-                return;
+                return -1;
         }
-
-        hotel.addPrice(price, roomIndex);
-        view.setDisplayText(foodOptions[choice].split(":")[0] + " has been ordered.");
     }
 }
-    
-

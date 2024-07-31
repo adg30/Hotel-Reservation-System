@@ -19,7 +19,12 @@ public class Reservation {
     */
     private Room room; 
     /**
-     * Constructs a reservation with the specified details.
+     * The discount code applied to this reservation
+     */
+    private String discountCode; 
+
+    /**
+     * Constructs a reservation without discount code.
      *
      * @param guestName the name of the guest
      * @param checkin   the check-in day (0-30)
@@ -31,6 +36,24 @@ public class Reservation {
         this.checkin = checkin;
         this.checkout = checkout;
         this.room = room;
+        this.discountCode = " ";
+    }
+
+    /**
+     * Constructs a reservation with a discount code.
+     *
+     * @param guestName the name of the guest
+     * @param checkin   the check-in day (0-30)
+     * @param checkout  the check-out day (0-30)
+     * @param room      the room associated with the reservation
+     * @param discountCode the discount code used in the reservation
+     */
+    public Reservation(String guestName, int checkin, int checkout, Room room, String discountCode){
+        this.guestName = guestName;
+        this.checkin = checkin;
+        this.checkout = checkout;
+        this.room = room;
+        this.discountCode = discountCode;
     }
 
     /**
@@ -65,6 +88,15 @@ public class Reservation {
      */
     public Room getRoom(){
         return this.room;
+    }
+
+    /**
+     * Gets the discount code applied to the reservation.
+     *
+     * @return the discount code applied to the reservation
+     */
+    public String getDiscountCode() {
+        return this.discountCode;
     }
 
     
