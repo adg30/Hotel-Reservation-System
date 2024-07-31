@@ -219,7 +219,7 @@ public class ManageButtonListener extends BaseButtonListener {
         }
     }
     return true;
-}
+    }
 
      /**
      * Removes rooms from the hotel.
@@ -327,94 +327,102 @@ public class ManageButtonListener extends BaseButtonListener {
         }
     }
     /**
- * Removes a reservation from the hotel.
- *
- * @param hotel the hotel.
- */
-private void removeReservation(Hotel hotel) {
-    ArrayList<Reservation> allReservations = gatherAllReservations(hotel);
+     * Removes a reservation from the hotel.
+     *
+     * @param hotel the hotel.
+     */
+    private void removeReservation(Hotel hotel) {
+        ArrayList<Reservation> allReservations = gatherAllReservations(hotel);
 
-    if (allReservations.isEmpty()) {
-        view.setDisplayText("No reservations to remove.");
-        return;
-    }
-
-    String[] reservationDescriptions = generateReservationDescriptions(allReservations);
-
-    JComboBox<String> comboBox = new JComboBox<>(reservationDescriptions);
-    int selection = JOptionPane.showConfirmDialog(view, comboBox, "Select a reservation to remove", JOptionPane.OK_CANCEL_OPTION);
-
-    if (selection == JOptionPane.OK_OPTION) {
-        int selectedIndex = comboBox.getSelectedIndex();
-        Reservation selectedReservation = allReservations.get(selectedIndex);
-
-        if (confirmAction("Are you sure you want to remove this reservation?")) {
-            String result = hotel.removeReservation(selectedReservation.getRoom(), selectedReservation.getGuestName());
-            view.setDisplayText(result);
-        } else {
-            view.setDisplayText("Modification discarded.");
-        }
-    } else {
-        view.setDisplayText("Reservation removal cancelled.");
-    }
-}
-
-/**
- * Gathers all reservations from the hotel.
- *
- * @param hotel the hotel.
- * @return a list of all reservations.
- */
-private ArrayList<Reservation> gatherAllReservations(Hotel hotel) {
-    ArrayList<Reservation> allReservations = new ArrayList<>();
-    for (Room room : hotel.getRooms()) {
-        allReservations.addAll(room.getReservations());
-    }
-    return allReservations;
-}
-
-/**
- * Generates descriptions for each reservation for display in the dropdown.
- *
- * @param allReservations the list of all reservations.
- * @return an array of reservation descriptions.
- */
-private String[] generateReservationDescriptions(ArrayList<Reservation> allReservations) {
-    String[] reservationDescriptions = new String[allReservations.size()];
-    for (int i = 0; i < allReservations.size(); i++) {
-        Reservation res = allReservations.get(i);
-        reservationDescriptions[i] = "Room ID: " + res.getRoom().getID() + ", Guest: " + res.getGuestName();
-    }
-    return reservationDescriptions;
-}
-
-
-  private void removeHotel(Hotel hotel) {
-    checkReservations(hotel);
-
-    int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotel.getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
-    if (confirm == JOptionPane.YES_OPTION) {
-        hotels.remove(hotel);
-        view.setDisplayText("Hotel removed successfully.");
-    } else {
-        view.setDisplayText("Hotel removal cancelled.");
-    }
-  }
-
-  public void datePriceModify(Hotel hotel) {
-    checkReservations(hotel);
-    // Prompt the user for the date to modify
-    String dateStr = JOptionPane.showInputDialog(view, "Which date would you like to modify (1-31):");
-    int date;
-    try {
-        date = Integer.parseInt(dateStr);
-        if (date < 1 || date > 31) {
-            view.setDisplayText("Invalid input. Date must be between 1 and 31.");
+        if (allReservations.isEmpty()) {
+            view.setDisplayText("No reservations to remove.");
             return;
         }
-    } catch (NumberFormatException e) {
-        view.setDisplayText("Invalid input. Please enter a valid date.");
-        return;
+
+        String[] reservationDescriptions = generateReservationDescriptions(allReservations);
+
+        JComboBox<String> comboBox = new JComboBox<>(reservationDescriptions);
+        int selection = JOptionPane.showConfirmDialog(view, comboBox, "Select a reservation to remove", JOptionPane.OK_CANCEL_OPTION);
+
+        if (selection == JOptionPane.OK_OPTION) {
+            int selectedIndex = comboBox.getSelectedIndex();
+            Reservation selectedReservation = allReservations.get(selectedIndex);
+
+            if (confirmAction("Are you sure you want to remove this reservation?")) {
+                String result = hotel.removeReservation(selectedReservation.getRoom(), selectedReservation.getGuestName());
+                view.setDisplayText(result);
+            } else {
+                view.setDisplayText("Modification discarded.");
+            }
+        } else {
+            view.setDisplayText("Reservation removal cancelled.");
+        }
+    }
+
+    /**
+     * Gathers all reservations from the hotel.
+     *
+     * @param hotel the hotel.
+     * @return a list of all reservations.
+     */
+    private ArrayList<Reservation> gatherAllReservations(Hotel hotel) {
+        ArrayList<Reservation> allReservations = new ArrayList<>();
+        for (Room room : hotel.getRooms()) {
+            allReservations.addAll(room.getReservations());
+        }
+        return allReservations;
+    }
+
+    /**
+     * Generates descriptions for each reservation for display in the dropdown.
+     *
+     * @param allReservations the list of all reservations.
+     * @return an array of reservation descriptions.
+     */
+    private String[] generateReservationDescriptions(ArrayList<Reservation> allReservations) {
+        String[] reservationDescriptions = new String[allReservations.size()];
+        for (int i = 0; i < allReservations.size(); i++) {
+            Reservation res = allReservations.get(i);
+            reservationDescriptions[i] = "Room ID: " + res.getRoom().getID() + ", Guest: " + res.getGuestName();
+        }
+        return reservationDescriptions;
+    }
+
+    /**
+     * Removes the hotel.
+     * 
+     * @param hotel the hotel to remove.
+     */
+    private void removeHotel(Hotel hotel) {
+        checkReservations(hotel);
+
+        int confirm = JOptionPane.showConfirmDialog(view, "Are you sure you want to remove hotel \"" + hotel.getName() + "\"?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            hotels.remove(hotel);
+            view.setDisplayText("Hotel removed successfully.");
+        } else {
+            view.setDisplayText("Hotel removal cancelled.");
+        }
+    }
+    /**
+     * Modifies the date-specific prices of the hotel.
+     * 
+     * @param hotel the hotel.
+     */
+    public void datePriceModify(Hotel hotel) {
+        checkReservations(hotel);
+        // Prompt the user for the date to modify
+        String dateStr = JOptionPane.showInputDialog(view, "Which date would you like to modify (1-31):");
+        int date;
+        try {
+            date = Integer.parseInt(dateStr);
+            if (date < 1 || date > 31) {
+                view.setDisplayText("Invalid input. Date must be between 1 and 31.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            view.setDisplayText("Invalid input. Please enter a valid date.");
+            return;
     }
 
     // Prompt the user for the new percentage
@@ -435,7 +443,11 @@ private String[] generateReservationDescriptions(ArrayList<Reservation> allReser
     hotel.setDatePrice(date - 1, percentage / 100);
     view.setDisplayText("Price for date " + date + " has been changed to " + percentage + "%.");
   }
-
+  /**
+   * Checks if there are still reservations in the designated hotel, returns if none
+   * 
+   * @param hotel
+   */
   public void checkReservations(Hotel hotel){
     boolean hasReservations = false;
     for (Room room : hotel.getRooms()) {
@@ -450,9 +462,14 @@ private String[] generateReservationDescriptions(ArrayList<Reservation> allReser
     }
 
   }
-  
+  /**
+     * Confirms an action with the user.
+     * 
+     * @param message the confirmation message.
+     * @return true if the user confirms, false otherwise.
+     */
   private boolean confirmAction(String message) {
     int confirm = JOptionPane.showConfirmDialog(view, message, "Confirm", JOptionPane.YES_NO_OPTION);
     return confirm == JOptionPane.YES_OPTION;
-}
+    }   
 }

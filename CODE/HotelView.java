@@ -2,7 +2,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
-
+/**
+ * HotelView class represents the graphical user interface for the hotel management system.
+ * More specifically, it is the "View" in its MVC architecture
+ */
 public class HotelView extends JFrame {
     private JCheckBox customPriceCheckbox;
     private JRadioButton standardHotel, dividedHotel;
@@ -10,6 +13,9 @@ public class HotelView extends JFrame {
     private JButton createButton, manageButton, viewButton, bookButton, exitButton, orderFoodButton;
     private int selectedHotelType;
 
+    /**
+     * Constructor for HotelView.
+     */
     public HotelView() {
         setTitle("Hotel Management System");
         setSize(600, 400);
@@ -36,35 +42,15 @@ public class HotelView extends JFrame {
         customPriceCheckbox = new JCheckBox();
         inputPanel.add(customPriceCheckbox);
 
-
+        //custom price checkbox actionlistener
         customPriceCheckbox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (customPriceCheckbox.isSelected()) {
-                    String customPrice = JOptionPane.showInputDialog("Enter custom price:");
-                    if (customPrice != null) {
-                        try {
-                            int price = Integer.parseInt(customPrice);
-                            if (price >= 100) {
-                                customPriceCheckbox.setText(customPrice);
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Invalid price! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
-                                customPriceCheckbox.setText("100");
-                            }
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, "Invalid input! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
-                            customPriceCheckbox.setText("100");
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Invalid input! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
-                        customPriceCheckbox.setText("100");
-                    }
-                }
+               handleCustomPriceCheckboxAction();
             }
         });
 
 
-        //experimenting with radiobuttons
-        inputPanel.add(new JLabel("Base Hotel Type:"));//make this work
+        inputPanel.add(new JLabel("Base Hotel Type:"));
         ButtonGroup hotelTypeButtonGroup = new ButtonGroup();
         standardHotel = new JRadioButton("Standard");
         dividedHotel = new JRadioButton("Divided");
@@ -73,6 +59,7 @@ public class HotelView extends JFrame {
         inputPanel.add(standardHotel);
         inputPanel.add(dividedHotel);
 
+        //radiobutton listeners
         standardHotel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 selectedHotelType = 1;//turn it into 1 for standard 2 for divided
@@ -116,11 +103,46 @@ public class HotelView extends JFrame {
         add(mainPanel, BorderLayout.NORTH);
   
     }
-
+    /**
+     * Handles the action event when the custom price checkbox is selected.
+     */
+    private void handleCustomPriceCheckboxAction() {
+        if (customPriceCheckbox.isSelected()) {
+            String customPrice = JOptionPane.showInputDialog("Enter custom price:");
+            if (customPrice != null) {
+                try {
+                    int price = Integer.parseInt(customPrice);
+                    if (price >= 100) {
+                        customPriceCheckbox.setText(customPrice);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid price! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                        customPriceCheckbox.setText("100");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid input! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                    customPriceCheckbox.setText("100");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid input! Setting default price to 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                customPriceCheckbox.setText("100");
+            }
+        }
+    }
+    
+    /**
+     * Gets the hotel name entered by the user.
+     *
+     * @return the hotel name.
+     */
     public String getHotelName() {
         return hotelNameField.getText();
     }
 
+    /**
+     * Gets the number of rooms entered by the user.
+     *
+     * @return the number of rooms.
+     */
     public int getNumRooms() {
         try {
             return Integer.parseInt(numRoomsField.getText());
@@ -129,6 +151,11 @@ public class HotelView extends JFrame {
         }
     }
 
+    /**
+     * Gets the room price entered by the user.
+     *
+     * @return the room price.
+     */
     public double getRoomPrice() {
         try {
             return Double.parseDouble(roomPriceField.getText());
@@ -137,14 +164,29 @@ public class HotelView extends JFrame {
         }
     }
 
+    /**
+     * Gets the selected hotel type.
+     *
+     * @return the selected hotel type (1 for standard, 2 for divided).
+     */
     public int getSelectedHotelType() {
         return selectedHotelType;
     }
 
+    /**
+     * Checks if the custom price checkbox is selected.
+     *
+     * @return true if the custom price checkbox is selected, false otherwise.
+     */
     public boolean isCustomPriceSelected() {
         return customPriceCheckbox.isSelected();
     }
-    
+
+    /**
+     * Gets the custom price entered by the user.
+     *
+     * @return the custom price.
+     */
     public double getCustomPrice() {
         try {
             return Double.parseDouble(customPriceCheckbox.getText());
@@ -153,7 +195,11 @@ public class HotelView extends JFrame {
         }
     }
 
-
+    /**
+     * Sets the display text in a non-editable text area.
+     *
+     * @param text the text to display.
+     */
     public void setDisplayText(String text) {
         JTextArea displayArea = new JTextArea(text);
         displayArea.setEditable(false);
@@ -165,29 +211,58 @@ public class HotelView extends JFrame {
         JOptionPane.showMessageDialog(this, scrollPane, "Display", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Adds an action listener to the create button.
+     *
+     * @param listener the action listener.
+     */
     public void addCreateButtonListener(ActionListener listener) {
         createButton.addActionListener(listener);
     }
 
+    /**
+     * Adds an action listener to the manage button.
+     *
+     * @param listener the action listener.
+     */
     public void addManageButtonListener(ActionListener listener) {
         manageButton.addActionListener(listener);
     }
 
+    /**
+     * Adds an action listener to the view button.
+     *
+     * @param listener the action listener.
+     */
     public void addViewButtonListener(ActionListener listener) {
         viewButton.addActionListener(listener);
     }
 
+    /**
+     * Adds an action listener to the book button.
+     *
+     * @param listener the action listener.
+     */
     public void addBookButtonListener(ActionListener listener) {
         bookButton.addActionListener(listener);
     }
 
+    /**
+     * Adds an action listener to the order food button.
+     *
+     * @param listener the action listener.
+     */
     public void addOrderFoodButtonListener(ActionListener listener) {
         orderFoodButton.addActionListener(listener);
     }
 
+    /**
+     * Adds an action listener to the exit button.
+     *
+     * @param listener the action listener.
+     */
     public void addExitButtonListener(ActionListener listener) {
         exitButton.addActionListener(listener);
     }
-
 
 }
