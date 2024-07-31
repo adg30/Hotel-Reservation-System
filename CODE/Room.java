@@ -11,6 +11,9 @@ public class Room {
     *The price of this room
     */
     private double basePrice;
+    /** 
+    *The total price of this room
+    */
     private double totalPrice;
     /** 
     *An array containing the availability of this room
@@ -20,6 +23,9 @@ public class Room {
     *An arraylist containing the reservations of this room
     */
     private ArrayList<Reservation> reservations;
+    /** 
+    *The type of this room
+    */
     private int type;
 
     
@@ -43,7 +49,11 @@ public class Room {
         }
     
     }
-
+    /**
+     * gets the type of this room
+     * 
+     * @return the type of this room
+     */
     public int getType(){
         return this.type;
     }
@@ -81,7 +91,13 @@ public class Room {
     public boolean getAvailability(int index){
         return this.availability[index];
     }
-
+    /**
+     * gets the availability of the room for a certain range.
+     * 
+     * @param index1 the index for the smaller day of range
+     * @param index2 the index for the bigger day of range
+     * @return
+     */
     public boolean getAvailabilityRange(int index1, int index2){
         
             for (int day = index1 - 1; day < index2 - 1; day++) {//keep the -1 thingy dont forget
@@ -127,6 +143,7 @@ public class Room {
             reservations.add(newReservation);
             updateAvailability();
         }
+
     /**
      * Updates the availability of the room based on the current reservations.
      */
@@ -150,11 +167,20 @@ public class Room {
             }   
         }
     }
-
+    /**
+     * adds a price to total price
+     * 
+     * @param addedPrice
+     */
     public void addTotalPrice(double addedPrice)
     {
         this.totalPrice += addedPrice;
     }
+    /**
+     * returns this room's total price
+     * 
+     * @return
+     */
     public double getTotalPrice()
     {
         return this.totalPrice;

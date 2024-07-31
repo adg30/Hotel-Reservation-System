@@ -7,7 +7,13 @@ import javax.swing.JOptionPane;
  * Abstract base class for button listeners that handles common functionality.
  */
 public abstract class BaseButtonListener implements ActionListener {
+    /**
+     * the hotels in the listener
+     */
     protected ArrayList<Hotel> hotels;
+    /**
+     * The view in the listener
+     */
     protected HotelView view;
 
     /**

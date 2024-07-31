@@ -100,7 +100,11 @@ public class Hotel {
             break;
         }
   }
-
+  /**
+   * gets the rooms array for the hotel
+   * 
+   * @return the rooms array of the hotel
+   */
   public ArrayList<Room> getRooms(){
     return rooms;
   }
@@ -119,7 +123,12 @@ public class Hotel {
     }
     return sum;
   }
-
+  /**
+   * Updates the price of all rooms in the hotel into a new price
+   * 
+   * @param price the new price of the rooms
+   * @return a string that is displayed in the controller's managebuttonlistener if it doesnt satisfy the requirements
+   */
   public String updatePrice(double price) {
     if (price < 100) {
         return "Price must be greater than or equal to 100.";
@@ -170,7 +179,13 @@ public class Hotel {
     }
     return -1;
   }
-
+  /**
+   * Removes a reservation from this hotel
+   * 
+   * @param room the room to remove the reservation from
+   * @param guestName the guest who's reservation is to be removed
+   * @return message that tells user the outcome of the process
+   */
   public String removeReservation(Room room, String guestName) {
 
     int reservationIndex = searchGuest(room, guestName);
@@ -183,7 +198,7 @@ public class Hotel {
 }
 
   /**
-   * Method for adding a name to the hotel.
+   * Method for setting a new name for the hotel.
    *
    * @param name the name of the hotel
    */
@@ -191,17 +206,31 @@ public class Hotel {
     this.name = name;
   }
 
-
+  /**
+   * Method for setting a DatePrice for the hotel
+   * 
+   * @param date the date to set a dateprice
+   * @param percentage the percentage the dateprice is set to
+   */
   public void setDatePrice(int date, double percentage){
     this.DatePrice.set(date, percentage);
   }
-
+  /**
+   * Method for getting the dateprice array of the hotel
+   * 
+   * @return the array of doubles containing the dateprices of the hotel
+   */
   public ArrayList<Double> getDatePrice(){
     return this.DatePrice;
   }
 
   
-
+  /**
+   * adds price to a room at a certain index
+   * 
+   * @param price
+   * @param index
+   */
   public void addPrice(double price, int index){
     rooms.get(index).addTotalPrice(price);
   }

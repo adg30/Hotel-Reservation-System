@@ -100,7 +100,6 @@ public class BookButtonListener extends BaseButtonListener {
     
             availableRoom.addReservation(guestName, checkin, checkout, discountCode);
             view.setDisplayText("Booking successful for guest " + guestName + " in room " + availableRoom.getID() + "\n" + breakdown.toString() + "\nTotal price after booking " + numNights + " nights: $" + price);
-            availableRoom.addTotalPrice(price);
         }
       }
 

@@ -2,13 +2,25 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 
-
+/**
+ * Handles the action of viewing hotel information
+ */
 public class ViewButtonListener extends BaseButtonListener {
+    /**
+     * Constructs a ViewButtonListener with the specified hotels and view.
+     *
+     * @param hotels the list of hotels.
+     * @param view the hotel view.
+     */
     public ViewButtonListener(ArrayList<Hotel> hotels, HotelView view){
         super(hotels, view);
     }
 
-
+    /**
+     * Handles the action performed when the button is clicked.
+     * 
+     * @param e The ActionEvent triggered by the button click.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Hotel selectedHotel = selectHotel(hotels, view, "View Hotel", "Select a hotel to view:");
@@ -17,6 +29,11 @@ public class ViewButtonListener extends BaseButtonListener {
         }
     }
 
+     /**
+     * Handles the process of viewing information about the specified hotel.
+     *
+     * @param hotel the hotel to view information about.
+     */
     private void viewHotel(Hotel hotel) {
         String[] options = {"High-level info", "Low-level info"};
         int choice = JOptionPane.showOptionDialog(view, "Which level of info would you like to view?", "View Hotel",
@@ -28,12 +45,20 @@ public class ViewButtonListener extends BaseButtonListener {
             displayLowLevelInfo(hotel);
         }
     }
-
+     /**
+     * Displays high-level information about the specified hotel.
+     *
+     * @param hotel the hotel to display high-level information about.
+     */
     private void displayHighLevelInfo(Hotel hotel) {
         String message = "\nName: " + hotel.getName() + "\nNumber of rooms: " + hotel.getRooms().size() + "\nTotal revenue: " + hotel.sumTotal();
         view.setDisplayText(message);
     }
-
+     /**
+     * Displays low-level information about the specified hotel.
+     *
+     * @param hotel the hotel to display low-level information about.
+     */
     private void displayLowLevelInfo(Hotel hotel) {
         String[] lowLevelOptions = {
             "Total number of booked & available rooms for a selected date",
@@ -57,7 +82,11 @@ public class ViewButtonListener extends BaseButtonListener {
                 view.setDisplayText("Invalid choice.");
         }
     }
-
+    /**
+     * Displays room availability for a specific date in the specified hotel.
+     *
+     * @param hotel the hotel to check room availability in.
+     */
     private void displayRoomAvailabilityForDate(Hotel hotel) {
         try {
             int date = Integer.parseInt(JOptionPane.showInputDialog(view, "Enter date:"));
@@ -71,7 +100,11 @@ public class ViewButtonListener extends BaseButtonListener {
             view.setDisplayText("Invalid date input.");
         }
     }
-
+    /**
+     * Displays information about a specific room in the specified hotel.
+     *
+     * @param hotel the hotel to get room information from.
+     */
     private void displayRoomInfo(Hotel hotel) {
         try {
             int roomID = Integer.parseInt(JOptionPane.showInputDialog(view, "Enter room ID:"));
@@ -94,7 +127,11 @@ public class ViewButtonListener extends BaseButtonListener {
             view.setDisplayText("Invalid room ID.");
         }
     }
-
+    /**
+     * Displays information about a specific reservation in the specified hotel.
+     *
+     * @param hotel the hotel to get reservation information from.
+     */
     private void displayReservationInfo(Hotel hotel) {
         boolean hasReservations = false;
         for (Room room : hotel.getRooms()) {
@@ -173,6 +210,12 @@ public class ViewButtonListener extends BaseButtonListener {
         return totalPrice * discount;
     }
 
+    /**
+     * Retrieves the discount percentage based on the discount code.
+     *
+     * @param discountCode the discount code.
+     * @return the discount percentage.
+     */
     private double getDiscountPercentage(String discountCode){
         if ("PAYDAY".equals(discountCode)){
             return 0.93;

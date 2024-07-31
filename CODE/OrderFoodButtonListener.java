@@ -8,6 +8,11 @@ public class OrderFoodButtonListener extends BaseButtonListener {
         super(hotels, view);
     }
 
+    /**
+     * Handles the action performed when the order food button is clicked.
+     * 
+     * @param e The ActionEvent triggered by the button click.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Hotel selectedHotel = selectHotel(hotels, view, "Order Food", "Select a hotel:");
