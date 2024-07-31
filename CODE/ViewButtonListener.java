@@ -190,7 +190,10 @@ public class ViewButtonListener extends BaseButtonListener {
     /**
      * Calculates the total price for the reservation based on the room price and the number of days.
      *
-     * @return the total price of the reservation
+     * @param hotel the hotel of the reservation
+     * @param reservation the reservation itself
+     * @param room the room of the reservation
+     * @return the total price
      */
     public double getTotalPrice(Hotel hotel, Reservation reservation, Room room) {
         double totalPrice = 0;

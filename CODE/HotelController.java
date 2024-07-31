@@ -1,13 +1,17 @@
 
 import java.util.ArrayList;
-/*
-TODO: 
-*/
-
+/**
+ * controller for the hotel reservation system
+ */
 public class HotelController {
   private ArrayList<Hotel> hotels;
   private HotelView view;
-
+  /**
+   * constructor for hotel controller, also initializes all button listeners
+   * 
+   * @param hotels list of hotels
+   * @param view hotel view instance 
+   */
   public HotelController(ArrayList<Hotel> hotels, HotelView view) {
     this.hotels = hotels;
     this.view = view;

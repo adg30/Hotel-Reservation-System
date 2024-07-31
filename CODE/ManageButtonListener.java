@@ -309,9 +309,10 @@ public class ManageButtonListener extends BaseButtonListener {
         }
     }
     /**
-     * Prompts the user to enter a new base price for a room type.
+     * Prompts the user to enter a new base price 
      * 
-     * @param roomType the room type.
+     * @param message the error message.
+     * @param minValue the minimum new baseprice
      * @return the entered base price.
      */
     private double promptForBasePrice(String message, double minValue) {
@@ -446,7 +447,7 @@ public class ManageButtonListener extends BaseButtonListener {
   /**
    * Checks if there are still reservations in the designated hotel, returns if none
    * 
-   * @param hotel
+   * @param hotel hotel to check reservation in
    */
   public void checkReservations(Hotel hotel){
     boolean hasReservations = false;

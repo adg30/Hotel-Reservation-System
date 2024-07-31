@@ -100,6 +100,7 @@ public class BookButtonListener extends BaseButtonListener {
     
             availableRoom.addReservation(guestName, checkin, checkout, discountCode);
             view.setDisplayText("Booking successful for guest " + guestName + " in room " + availableRoom.getID() + "\n" + breakdown.toString() + "\nTotal price after booking " + numNights + " nights: $" + price);
+            availableRoom.addTotalPrice(price);//DONT REMOVE
         }
       }
 
@@ -109,7 +110,7 @@ public class BookButtonListener extends BaseButtonListener {
      * @param hotel    The hotel instance.
      * @param checkin  The check-in date.
      * @param checkout The check-out date.
-     * @param roomType The room type.
+     * @param type The room type.
      * @return The selected Room instance or null if no room is available.
      */
     public Room selectAutomatically(Hotel hotel, int checkin, int checkout, int type) {
@@ -127,7 +128,7 @@ public class BookButtonListener extends BaseButtonListener {
      * @param hotel    The hotel instance.
      * @param checkin  The check-in date.
      * @param checkout The check-out date.
-     * @param roomType The room type.
+     * @param type The room type.
      * @return The selected Room instance or null if no room is available.
      */
     public Room selectManually(Hotel hotel, int checkin, int checkout, int type) {

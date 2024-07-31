@@ -13,20 +13,47 @@ public class Hotel {
   *list of rooms in the hotel
   */
   private ArrayList<Room> rooms = new ArrayList<Room>();
+  /**
+   * dateprice array of the hotel
+   */
   private ArrayList<Double> DatePrice;
   
+  /**
+   * Contructor for hotel with no custom price
+   * 
+   * @param name name of hotel
+   * @param numrooms number of rooms of hotel
+   * @param type type of hotel
+   */
   public Hotel(String name, int numrooms, int type) {
     initializeHotel(name, numrooms, type, 1299.0);
   }
-
+  /**
+   * constructor for hotel with custom price included
+   * 
+   * @param name name of hotel
+   * @param numrooms number of rooms
+   * @param price custom price of hotel
+   * @param type type of hotel
+   */
   public Hotel(String name, int numrooms, double price, int type) {
     initializeHotel(name, numrooms, type, price);
   }
-
+  /**
+   * constructor for an empty hotel
+   */
   public Hotel() {
     this.rooms = new ArrayList<>();
   }
 
+  /**
+   * Initializes a hotel
+   * 
+   * @param name name of hotel
+   * @param numrooms number of rooms of hotel
+   * @param type type of hotel(standard or divided)
+   * @param price base price of rooms for the hotel
+   */
   private void initializeHotel(String name, int numrooms, int type, double price) {
     this.name = name;
     this.rooms = new ArrayList<>();
@@ -85,7 +112,7 @@ public class Hotel {
    * Adds a new room to the hotel with a specified ID.
    *
    * @param ID the ID of the new room
-   * @param scan the scanner passed from main
+   * @param model the type of the room
    */
   public void addRoom(int ID, int model) {
         switch(model){
@@ -228,13 +255,18 @@ public class Hotel {
   /**
    * adds price to a room at a certain index
    * 
-   * @param price
-   * @param index
+   * @param price the price to be added
+   * @param index the index of the room the price is added to
    */
   public void addPrice(double price, int index){
     rooms.get(index).addTotalPrice(price);
   }
-
+  /**
+   * finds the room index reserved by searching using guest name
+   * 
+   * @param guestName the guest to be searched
+   * @return the index of the room, if not found, return -1
+   */
   public int findRoomIndexByGuest(String guestName) {
     for (int i = 0; i < rooms.size(); i++) {
         for (Reservation reservation : rooms.get(i).getReservations()) {

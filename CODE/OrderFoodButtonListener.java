@@ -2,8 +2,16 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-
+/**
+ * Handles ordering of food for a guest
+ */
 public class OrderFoodButtonListener extends BaseButtonListener {
+    /**
+     * constructor for order food button listener
+     * 
+     * @param hotels the list of hotels
+     * @param view the hotel view
+     */
     public OrderFoodButtonListener(ArrayList<Hotel> hotels, HotelView view) {
         super(hotels, view);
     }
@@ -22,7 +30,11 @@ public class OrderFoodButtonListener extends BaseButtonListener {
             view.setDisplayText("Invalid Hotel.");
         }
     }
-
+    /**
+     * orders food in the selected hotel
+     * 
+     * @param hotel the hotel to order food in 
+     */
     private void orderFood(Hotel hotel) {
         ArrayList<String> guestNames = getGuestNames(hotel);
 
@@ -49,7 +61,12 @@ public class OrderFoodButtonListener extends BaseButtonListener {
             view.setDisplayText("Food has been ordered.");
         }
     }
-
+    /**
+     * returns the guest names of a hotel in the form of a list
+     * 
+     * @param hotel the hotel used
+     * @return an arraylist of strings for the guestnames
+     */
     private ArrayList<String> getGuestNames(Hotel hotel) {
         ArrayList<String> guestNames = new ArrayList<>();
         for (Room room : hotel.getRooms()) {
@@ -59,7 +76,12 @@ public class OrderFoodButtonListener extends BaseButtonListener {
         }
         return guestNames;
     }
-
+    /**
+     * prompts user for selecting a guest
+     * 
+     * @param guestNames arraylist of guestnames
+     * @return the chosen guest
+     */
     private String promptForGuestSelection(ArrayList<String> guestNames) {
         JComboBox<String> guestComboBox = new JComboBox<>(guestNames.toArray(new String[0]));
         int result = JOptionPane.showConfirmDialog(view, guestComboBox, "Select Guest", JOptionPane.OK_CANCEL_OPTION);
@@ -70,7 +92,11 @@ public class OrderFoodButtonListener extends BaseButtonListener {
 
         return (String) guestComboBox.getSelectedItem();
     }
-
+    /**
+     * prompts the user for the food they wish to order
+     * 
+     * @return the price of the food chosen
+     */
     private double promptForFoodOrder() {
         String[] foodOptions = {
             "Toccino with Rice: 299.0",

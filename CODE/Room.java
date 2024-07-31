@@ -34,6 +34,7 @@ public class Room {
     *
     * @param ID    the ID of the room
     * @param price the base price of the room
+    * @param type the type of the room
     **/
     public Room(int ID, double price, int type){
         int i;
@@ -96,7 +97,7 @@ public class Room {
      * 
      * @param index1 the index for the smaller day of range
      * @param index2 the index for the bigger day of range
-     * @return
+     * @return boolean value of true if the range is available, false otherwise
      */
     public boolean getAvailabilityRange(int index1, int index2){
         
@@ -170,7 +171,7 @@ public class Room {
     /**
      * adds a price to total price
      * 
-     * @param addedPrice
+     * @param addedPrice the price added to the total
      */
     public void addTotalPrice(double addedPrice)
     {
@@ -179,7 +180,7 @@ public class Room {
     /**
      * returns this room's total price
      * 
-     * @return
+     * @return this room's total price
      */
     public double getTotalPrice()
     {
