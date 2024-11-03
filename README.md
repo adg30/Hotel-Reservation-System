@@ -1,2 +1,3 @@
-# CCPROG3-MCO2
-An implementation of the CCPROG MCO2 specs, continuing on from our MCO1. By Aaron Go and John Liong
+# Hotel Reservation System
+An implementation of the CCPROG3 MCO2 specs which involve the creation of a Hotel Reservation System. 
+By Aaron Go and John Liong
